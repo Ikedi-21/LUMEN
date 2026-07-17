@@ -1,0 +1,130 @@
+﻿/* Unified button system — overrides existing per-page button classes
+   without changing any JSX. Grouped by role: primary action, secondary/outline,
+   danger/remove, small icon actions. */
+
+body .btn-primary,
+body .btn-checkout,
+body .btn-add-cart,
+body .btn-purchase,
+body .btn-start-shopping,
+body .btn-search-submit,
+body .btn-confirm-action,
+body .btn-read-full {
+  height: var(--btn-height);
+  padding: 0 var(--btn-padding-x);
+  border-radius: var(--radius-card);
+  font-weight: var(--btn-font-weight);
+  font-family: var(--font-body);
+  border: none;
+  cursor: pointer;
+  transition: var(--btn-transition);
+  background-color: var(--accent-primary);
+  color: var(--text-on-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+body .btn-primary:hover:not(:disabled),
+body .btn-checkout:hover:not(:disabled),
+body .btn-add-cart:hover:not(:disabled),
+body .btn-purchase:hover:not(:disabled),
+body .btn-start-shopping:hover,
+body .btn-search-submit:hover,
+body .btn-confirm-action:hover,
+body .btn-read-full:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+body .btn-primary:disabled,
+body .btn-checkout:disabled,
+body .btn-add-cart:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+body .btn-outline,
+body .btn-back-info,
+body .btn-back-home,
+body .btn-confirm-cancel,
+body .btn-wishlist {
+  height: var(--btn-height);
+  padding: 0 var(--btn-padding-x);
+  border-radius: var(--radius-card);
+  font-weight: var(--btn-font-weight);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--btn-transition);
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+body .btn-outline:hover:not(:disabled),
+body .btn-back-info:hover,
+body .btn-back-home:hover,
+body .btn-confirm-cancel:hover,
+body .btn-wishlist:hover {
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+}
+
+body .btn-wishlist.active {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background-color: rgba(156, 59, 50, 0.08);
+}
+
+body .btn-remove-item,
+body .btn-remove-wishlist,
+body .btn-action-small {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background-color: var(--card-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--btn-transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body .btn-remove-item:hover,
+body .btn-remove-wishlist:hover,
+body .btn-action-small:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background-color: rgba(229, 72, 77, 0.08);
+}
+
+body .btn-qty {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  background-color: var(--card-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--btn-transition);
+}
+
+body .btn-qty:hover:not(:disabled) {
+  border-color: var(--accent-secondary);
+}
+
+body .btn-qty:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -1,0 +1,45 @@
+﻿:root {
+  --bg: #100E0C;
+  --surface: #1B1815;
+  --card-surface: #24201C;
+  --border: #3A342E;
+
+  --text-primary: #F1EAE0;
+  --text-secondary: #A9A093;
+
+  --accent-primary: #9C3B32;
+  --accent-secondary: #C4A24D;
+
+  --text-on-primary: #F1EAE0;
+  --text-on-secondary: #100E0C;
+
+  --danger: #E5484D;
+  --success: #7FA65C;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --radius-card: 8px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover: 0 8px 28px rgba(0, 0, 0, 0.5);
+  --glow-accent: 0 0 0 1px rgba(196, 162, 77, 0.4), 0 0 20px rgba(196, 162, 77, 0.15);
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", -apple-system, sans-serif;
+
+
+  /* Button system */
+  --btn-height: 44px;
+  --btn-padding-x: 20px;
+  --btn-font-weight: 500;
+  --btn-transition: all 0.2s ease;
+}
+

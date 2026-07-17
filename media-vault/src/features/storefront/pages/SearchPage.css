@@ -1,0 +1,86 @@
+.search-page {
+  padding: var(--space-7) var(--space-6);
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 80vh;
+}
+
+.search-title {
+  font-size: 2.5rem;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-4);
+  text-align: left;
+}
+
+.search-form-wrapper {
+  margin-bottom: var(--space-7);
+  max-width: 600px;
+  text-align: left;
+}
+
+.search-input-container {
+  display: flex;
+  gap: var(--space-3);
+  position: relative;
+}
+
+.search-input-container input {
+  flex-grow: 1;
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--card-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: var(--shadow-card);
+}
+
+.search-input-container input:focus {
+  border-color: var(--accent-secondary);
+  box-shadow: 0 0 0 3px rgba(196, 162, 77, 0.15), var(--shadow-card);
+  background-color: var(--surface);
+}
+
+.btn-search-submit {
+  padding: 0 var(--space-5);
+  background-color: var(--accent-primary);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: var(--radius-card);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(156, 59, 50, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.btn-search-submit:hover {
+  background-color: #b8473c;
+  box-shadow: 0 6px 16px rgba(156, 59, 50, 0.45);
+}
+
+.btn-search-submit:active {
+  transform: scale(0.97);
+}
+
+.search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-6) var(--space-5);
+}
+
+.search-no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-secondary);
+  padding: var(--space-7) 0;
+  font-size: 1.1rem;
+}

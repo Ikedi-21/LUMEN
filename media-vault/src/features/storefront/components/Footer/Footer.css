@@ -1,0 +1,107 @@
+/* ============================================
+   Footer — Netflix-style understated layout
+   ============================================ */
+
+.lumen-footer {
+  background-color: var(--bg);
+  padding: 72px 0 40px;
+  margin-top: var(--space-8);
+}
+
+.footer-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 4%;
+}
+
+/* ---- Contact prompt ---- */
+.footer-contact {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 32px;
+}
+
+.footer-contact a {
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-contact a:hover {
+  color: var(--text-primary);
+}
+
+/* ---- 4-column link grid ---- */
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-col a {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  text-decoration: none;
+  line-height: 1.4;
+  transition: color 0.15s ease;
+}
+
+.footer-col a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---- Region indicator ---- */
+.footer-region {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+/* ---- Copyright ---- */
+.footer-copy {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  opacity: 0.5;
+  line-height: 1.6;
+}
+
+/* ---- Responsive: tablet (2 columns) ---- */
+@media (max-width: 768px) {
+  .lumen-footer {
+    padding-top: 56px;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 16px;
+  }
+}
+
+/* ---- Responsive: mobile (2 columns, tighter) ---- */
+@media (max-width: 480px) {
+  .lumen-footer {
+    padding-top: 48px;
+  }
+
+  .footer-inner {
+    padding: 0 5%;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 12px;
+  }
+
+  .footer-col a {
+    font-size: 0.8rem;
+  }
+}

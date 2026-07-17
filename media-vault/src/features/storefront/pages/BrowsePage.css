@@ -1,0 +1,143 @@
+.browse-page {
+  padding: var(--space-7) var(--space-6);
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 80vh;
+}
+
+.browse-title {
+  font-size: 2.5rem;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-4);
+}
+
+.browse-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-7);
+}
+
+.browse-controls input,
+.browse-controls select {
+  padding: var(--space-3) var(--space-5);
+  background-color: var(--card-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  min-width: 220px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.browse-controls input:focus,
+.browse-controls select:focus {
+  border-color: var(--accent-secondary);
+  box-shadow: 0 0 0 3px rgba(196, 162, 77, 0.15);
+  background-color: var(--surface);
+}
+
+.browse-controls input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.browse-controls select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C4A24D' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-5) center;
+  padding-right: var(--space-7);
+  cursor: pointer;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  width: 100%;
+}
+
+.filter-chip {
+  padding: 8px 18px;
+  background-color: var(--card-surface);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              border-color 0.25s ease,
+              color 0.2s ease,
+              transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  outline: none;
+}
+
+.filter-chip:hover {
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+  transform: translateY(-1px) scale(1.02);
+}
+
+.filter-chip.active {
+  background-color: var(--accent-secondary);
+  border-color: var(--accent-secondary);
+  color: var(--text-on-secondary);
+  transform: scale(1.04);
+}
+
+.filter-chip:active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter-chip {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+.browse-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-6) var(--space-5);
+}
+
+.browse-grid .media-card {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .browse-page {
+    padding: var(--space-5) var(--space-4);
+  }
+  
+  .browse-title {
+    font-size: 2rem;
+    margin-bottom: var(--space-4);
+  }
+  
+  .browse-controls {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  
+  .browse-controls input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .browse-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-4) var(--space-3);
+  }
+}
+
+

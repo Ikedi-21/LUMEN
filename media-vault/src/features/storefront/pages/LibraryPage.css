@@ -1,0 +1,174 @@
+.library-page {
+  padding: 3rem var(--space-6);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.library-header {
+  margin-bottom: 3rem;
+}
+
+.library-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.library-header p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.library-loading,
+.empty-library {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: var(--card-surface);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border);
+}
+
+.empty-library h2 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-library p {
+  color: var(--text-secondary);
+}
+
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.library-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--border-light);
+}
+
+.library-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+  border-color: var(--accent-secondary);
+}
+
+.card-image-wrapper {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  width: 100%;
+  overflow: hidden;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.library-card:hover .card-image {
+  transform: scale(1.05);
+}
+
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(10, 8, 7, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.library-card:hover .card-overlay {
+  opacity: 1;
+}
+
+.overlay-icon {
+  color: var(--bg-main);
+  background-color: var(--accent-primary);
+  border-radius: 50%;
+  padding: 10px;
+  transform: scale(0.8);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.library-card:hover .overlay-icon {
+  transform: scale(1);
+}
+
+.card-info {
+  padding: 1rem;
+}
+
+.card-title {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-meta {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.library-remove-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(16, 14, 12, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-secondary);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.library-remove-btn:hover {
+  background-color: var(--danger);
+  color: var(--text-on-primary);
+  border-color: var(--danger);
+  transform: scale(1.1);
+}
+
+.library-grid .library-card {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .library-page {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .library-header h1 {
+    font-size: 2rem;
+  }
+
+  .library-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-4) var(--space-3);
+  }
+}
+
+

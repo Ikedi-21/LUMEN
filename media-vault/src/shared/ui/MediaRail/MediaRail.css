@@ -1,0 +1,59 @@
+.media-rail {
+  padding: var(--space-7) var(--space-6) 0;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.media-rail h2 {
+  font-size: 1.5rem;
+  margin-bottom: var(--space-4);
+  color: var(--text-primary);
+  border-left: 3px solid var(--accent-secondary);
+  padding-left: var(--space-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.media-rail-scroll {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  padding: var(--space-3) var(--space-2) var(--space-5);
+  margin-left: calc(-1 * var(--space-2));
+  margin-right: calc(-1 * var(--space-2));
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg);
+}
+
+/* Local Horizontal Scrollbar custom styles for rails */
+.media-rail-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.media-rail-scroll::-webkit-scrollbar-track {
+  background: rgba(16, 14, 12, 0.5);
+  border-radius: var(--radius-card);
+}
+
+.media-rail-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-card);
+  transition: background 0.3s ease;
+}
+
+.media-rail-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
+}
+
+@media (max-width: 768px) {
+  .media-rail {
+    padding: var(--space-5) var(--space-4) 0;
+  }
+
+  .media-rail h2 {
+    font-size: 1.25rem;
+  }
+}
+
+

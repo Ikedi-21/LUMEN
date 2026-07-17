@@ -1,0 +1,116 @@
+.admin-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-sidebar {
+  background-color: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5) var(--space-4);
+}
+
+.admin-logo-wrapper {
+  margin-bottom: var(--space-6);
+  padding: 0 var(--space-2);
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex-grow: 1;
+}
+
+.admin-nav-item {
+  display: block;
+  padding: 10px 16px;
+  color: var(--text-secondary);
+  border-radius: var(--radius-card);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.admin-nav-item:hover {
+  color: var(--text-primary);
+  background-color: var(--card-surface);
+}
+
+.admin-nav-item.active {
+  color: var(--accent-secondary);
+  background-color: rgba(196, 162, 77, 0.08);
+  border-left: 3px solid var(--accent-secondary);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.admin-main {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-6);
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  height: 70px;
+}
+
+.admin-breadcrumb {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+}
+
+.admin-user-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.admin-username {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.btn-admin-logout {
+  padding: 6px 12px;
+  background-color: var(--card-surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: var(--radius-card);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-admin-logout:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background-color: rgba(229, 72, 77, 0.04);
+}
+
+.admin-content-area {
+  padding: var(--space-6);
+  flex-grow: 1;
+  overflow-y: auto;
+}

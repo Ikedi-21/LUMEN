@@ -1,0 +1,120 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+/* Custom Text Selection */
+::selection {
+  background-color: var(--accent-primary);
+  color: var(--text-on-primary);
+}
+
+/* Global Custom Scrollbars for Desktop */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--bg);
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Firefox Scrollbar Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg);
+}
+
+/* Focus outline for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--accent-secondary);
+  outline-offset: 2px;
+}
+
+/* Page Transitions */
+.page-transition-container {
+  opacity: 0;
+  transition: opacity 160ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.page-transition-container.fadeIn {
+  opacity: 1;
+}
+
+.page-transition-container.fadeOut {
+  opacity: 0;
+}
+
+/* Button & CTA Tactile Micro-interactions */
+.btn-add-cart:active,
+.hero-cta:active,
+.btn-checkout:active,
+.btn-search-submit:active,
+.btn-qty:active,
+.btn-admin-primary:active,
+.btn-admin-secondary:active,
+.btn-confirm-action:active,
+.btn-confirm-cancel:active,
+.btn-wishlist:active,
+.btn-back-home:active,
+.navbar-actions button:active {
+  transform: scale(0.97) !important;
+}
+
+/* Prefers-reduced-motion compatibility */
+@media (prefers-reduced-motion: reduce) {
+  .page-transition-container {
+    opacity: 1 !important;
+    transition: none !important;
+  }
+  
+  .btn-add-cart:active,
+  .hero-cta:active,
+  .btn-checkout:active,
+  .btn-search-submit:active,
+  .btn-qty:active,
+  .btn-admin-primary:active,
+  .btn-admin-secondary:active,
+  .btn-confirm-action:active,
+  .btn-confirm-cancel:active,
+  .btn-wishlist:active,
+  .btn-back-home:active,
+  .navbar-actions button:active {
+    transform: none !important;
+  }
+}
+
