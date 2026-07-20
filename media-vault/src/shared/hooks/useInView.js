@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 
 export function useInView(options = {}) {
   const ref = useRef(null);
-  const [inView, setInView] = useState(false);
+  const [inView, setInView] = useState(() => {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
 
   useEffect(() => {
     // Respect prefers-reduced-motion: if reduce, set to visible instantly
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setInView(true);
       return;
     }
 
@@ -32,6 +33,7 @@ export function useInView(options = {}) {
         observer.unobserve(currentRef);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options.triggerOnce, options.threshold, options.rootMargin, options.root]);
 
   return [ref, inView];

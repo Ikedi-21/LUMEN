@@ -1,4 +1,4 @@
-﻿/* Unified button system — overrides existing per-page button classes
+/* Unified button system — overrides existing per-page button classes
    without changing any JSX. Grouped by role: primary action, secondary/outline,
    danger/remove, small icon actions. */
 
@@ -80,7 +80,7 @@ body .btn-wishlist:hover {
 body .btn-wishlist.active {
   border-color: var(--accent-primary);
   color: var(--accent-primary);
-  background-color: rgba(156, 59, 50, 0.08);
+  background-color: rgba(184, 99, 46, 0.08);
 }
 
 body .btn-remove-item,

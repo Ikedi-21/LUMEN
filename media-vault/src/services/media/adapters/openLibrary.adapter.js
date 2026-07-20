@@ -61,3 +61,15 @@ export function normalizeBook(item) {
     isPublicDomain
   };
 }
+
+/**
+ * Normalizes a paginated Open Library response into { items, hasMore }.
+ * Uses page size of 20 — if exactly 20 results returned, assume more exist.
+ */
+export function normalizeBookPage(response) {
+  const docs = response.docs || [];
+  return {
+    items: docs.map(normalizeBook),
+    hasMore: docs.length >= 20,
+  };
+}

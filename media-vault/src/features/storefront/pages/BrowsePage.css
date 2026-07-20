@@ -38,7 +38,7 @@
 .browse-controls input:focus,
 .browse-controls select:focus {
   border-color: var(--accent-secondary);
-  box-shadow: 0 0 0 3px rgba(196, 162, 77, 0.15);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
   background-color: var(--surface);
 }
 
@@ -49,18 +49,33 @@
 
 .browse-controls select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C4A24D' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23D4AF37' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right var(--space-5) center;
   padding-right: var(--space-7);
   cursor: pointer;
 }
 
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  margin-top: var(--space-3);
+}
+
+.filter-group-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
 .filter-chips {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin-top: var(--space-4);
   width: 100%;
 }
 
@@ -97,6 +112,23 @@
   transform: scale(0.97);
 }
 
+.filter-clear-btn {
+  padding: 8px 18px;
+  background-color: transparent;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.filter-clear-btn:hover {
+  background-color: rgba(229, 72, 77, 0.1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .filter-chip {
     transition: none !important;
@@ -112,6 +144,20 @@
 
 .browse-grid .media-card {
   width: 100%;
+}
+
+.infinite-scroll-sentinel {
+  height: 1px;
+  width: 100%;
+}
+
+.browse-end-message {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: var(--space-6) 0 var(--space-8);
+  border-top: 1px dashed var(--border);
+  margin-top: var(--space-6);
 }
 
 @media (max-width: 768px) {

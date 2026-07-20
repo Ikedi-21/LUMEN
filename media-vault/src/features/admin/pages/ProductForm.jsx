@@ -57,6 +57,7 @@ export default function ProductForm() {
     }
 
     loadProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, isEditMode, navigate]);
 
   function validate() {

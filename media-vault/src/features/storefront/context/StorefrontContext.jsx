@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/features/auth";
 import { getCartItems } from "@/services/cart";
@@ -44,14 +45,31 @@ export function StorefrontProvider({ children }) {
   }, [user]);
 
   useEffect(() => {
+    let active = true;
     if (user) {
-      refreshCart();
-      refreshWishlist();
-      refreshCoins();
+      const timer = setTimeout(() => {
+        if (active) {
+          refreshCart();
+          refreshWishlist();
+          refreshCoins();
+        }
+      }, 0);
+      return () => {
+        active = false;
+        clearTimeout(timer);
+      };
     } else {
-      setCartCount(0);
-      setWishlistCount(0);
-      setCoins(0);
+      const timer = setTimeout(() => {
+        if (active) {
+          setCartCount(0);
+          setWishlistCount(0);
+          setCoins(0);
+        }
+      }, 0);
+      return () => {
+        active = false;
+        clearTimeout(timer);
+      };
     }
   }, [user, refreshCart, refreshWishlist, refreshCoins]);
 

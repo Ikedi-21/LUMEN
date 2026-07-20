@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { useAuth } from "@/features/auth";
-import { hasPurchased } from "@/services/purchases";
+import { hasPurchased, saveProgress } from "@/services/purchases";
 import { fetchMovieTrailer } from "@/services/media/clients/tmdb";
 import { ArrowLeft } from "lucide-react";
 import "./WatchPage.css";
@@ -21,33 +21,49 @@ export default function WatchPage() {
   const purchaseId = id;                          // "tmdb-12345" or just "12345"
   const tmdbId = id.replace(/^tmdb-/, "");        // always "12345"
 
+
   useEffect(() => {
-    if (user && id) {
-      checkAccessAndLoad();
-    } else if (!authLoading && !user) {
-      setLoading(false);
-    }
-  }, [user, id, authLoading]);
+    let active = true;
+    if (authLoading) return;
 
-  async function checkAccessAndLoad() {
-    setLoading(true);
-    try {
-      const isOwned = await hasPurchased(user.id, purchaseId);
-      setPurchased(isOwned);
-
-      if (isOwned) {
-        const trailer = await fetchMovieTrailer(tmdbId);
-        if (trailer?.key) {
-          setTrailerKey(trailer.key);
-        }
-      }
-    } catch (err) {
-      console.error("WatchPage error:", err);
-      setError("Failed to verify access or load content.");
-    } finally {
-      setLoading(false);
+    if (!user) {
+      const timer = setTimeout(() => {
+        if (active) setLoading(false);
+      }, 0);
+      return () => clearTimeout(timer);
     }
-  }
+
+    if (id) {
+      hasPurchased(user.id, purchaseId)
+        .then((isOwned) => {
+          if (!active) return;
+          setPurchased(isOwned);
+          if (isOwned) {
+            saveProgress(user.id, purchaseId, 45, "1h 10m left");
+            return fetchMovieTrailer(tmdbId);
+          }
+        })
+        .then((trailer) => {
+          if (!active) return;
+          if (trailer !== undefined) {
+            if (trailer?.key) {
+              setTrailerKey(trailer.key);
+            }
+          }
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("WatchPage error:", err);
+          if (active) {
+            setError("Failed to verify access or load content.");
+            setLoading(false);
+          }
+        });
+    }
+    return () => {
+      active = false;
+    };
+  }, [user, id, authLoading, purchaseId, tmdbId]);
 
   if (authLoading || loading) return <div className="watch-message">Loading player...</div>;
   if (!user) return <Navigate to="/login" replace />;

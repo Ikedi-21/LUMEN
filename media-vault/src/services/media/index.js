@@ -1,1 +1,1 @@
-export { getMediaByType, getMediaById, searchMedia } from "./media.service";
+export { getMediaByType, getMediaByTypePage, getMediaById, searchMedia, searchMediaPage } from "./media.service";

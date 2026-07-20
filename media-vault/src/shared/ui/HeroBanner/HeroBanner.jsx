@@ -1,54 +1,39 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Play, Info } from "lucide-react";
+import { Play, Info, ChevronLeft, ChevronRight } from "lucide-react";
 import "./HeroBanner.css";
 
-const INTERVAL_MS = 5000;
-const FADE_MS = 700;
+const MAX_SLIDES = 3;
 
 export default function HeroBanner({ items = [], item }) {
   // Backwards-compat: accept either `items` array or single `item`
-  const slides = items.length > 0 ? items : item ? [item] : [];
+  const allSlides = items.length > 0 ? items : item ? [item] : [];
+  const slides = allSlides.slice(0, MAX_SLIDES);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const timerRef = useRef(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
   const navigate = useNavigate();
 
   // Detect prefers-reduced-motion
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mq.matches);
     const handler = (e) => setPrefersReducedMotion(e.matches);
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  // Auto-advance timer
-  const startTimer = useCallback(() => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    if (slides.length <= 1) return;
-    timerRef.current = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % slides.length);
-    }, INTERVAL_MS);
-  }, [slides.length]);
-
-  useEffect(() => {
-    if (!isPaused) {
-      startTimer();
-    } else {
-      if (timerRef.current) clearInterval(timerRef.current);
-    }
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [isPaused, startTimer]);
-
   function goToSlide(index) {
     setActiveIndex(index);
-    // Reset timer so user gets a full 5s after clicking a dot
-    startTimer();
+  }
+
+  function goPrev() {
+    setActiveIndex((prev) => (prev - 1 + slides.length) % slides.length);
+  }
+
+  function goNext() {
+    setActiveIndex((prev) => (prev + 1) % slides.length);
   }
 
   if (slides.length === 0) return null;
@@ -58,11 +43,7 @@ export default function HeroBanner({ items = [], item }) {
     : "hero-carousel-slide";
 
   return (
-    <section
-      className="netflix-hero"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
+    <section className="netflix-hero">
       {/* Slide layers — all stacked, only active one gets opacity 1 */}
       {slides.map((slide, i) => {
         const bgImage =
@@ -115,6 +96,18 @@ export default function HeroBanner({ items = [], item }) {
           </Link>
         </div>
       </div>
+
+      {/* Manual prev/next arrows */}
+      {slides.length > 1 && (
+        <>
+          <button className="hero-arrow hero-arrow--prev" onClick={goPrev} aria-label="Previous slide">
+            <ChevronLeft size={28} />
+          </button>
+          <button className="hero-arrow hero-arrow--next" onClick={goNext} aria-label="Next slide">
+            <ChevronRight size={28} />
+          </button>
+        </>
+      )}
 
       {/* Dot indicators */}
       {slides.length > 1 && (

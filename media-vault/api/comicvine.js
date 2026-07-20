@@ -1,3 +1,4 @@
+/* global process */
 export default async function handler(req, res) {
   // Allow the Vite dev server (different port) to call this route
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -8,7 +9,7 @@ export default async function handler(req, res) {
     return res.status(204).end();
   }
 
-  const { query = "spider-man" } = req.query;
+  const { query = "spider-man", offset = "0", limit = "20" } = req.query;
   const KEY = process.env.COMICVINE_KEY;
 
   if (!KEY) {
@@ -28,7 +29,9 @@ export default async function handler(req, res) {
       `&format=json` +
       `&query=${encodeURIComponent(query)}` +
       `&resources=issue` +
-      `&field_list=id,name,image,cover_date,volume,description`;
+      `&field_list=id,name,image,cover_date,volume,description` +
+      `&offset=${offset}` +
+      `&limit=${limit}`;
 
     const response = await fetch(url, {
       headers: {

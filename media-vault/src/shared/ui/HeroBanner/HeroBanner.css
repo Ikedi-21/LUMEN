@@ -127,8 +127,39 @@
 }
 
 /* ------------------------------------------
-   Dot indicators
+   Prev/Next Arrow Buttons
    ------------------------------------------ */
+.hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  padding: 0;
+}
+.hero-arrow:hover {
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+.hero-arrow--prev {
+  left: 20px;
+}
+.hero-arrow--next {
+  right: 20px;
+}
+
+
 .hero-dots {
   position: absolute;
   bottom: 28px;

@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { useAuth } from "@/features/auth";
 import { updateProfile } from "@/services/profiles";
 import { uploadAvatar } from "@/services/storage";
-import { useToast } from "@/shared/ui";
+import { useToast, Badge } from "@/shared/ui";
+import { ShieldCheck } from "lucide-react";
 import "./SettingsPage.css";
 
 export default function SettingsPage() {
@@ -17,7 +18,10 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (profile) {
-      setUsername(profile.username || "");
+      const timer = setTimeout(() => {
+        setUsername(profile.username || "");
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [profile]);
 
@@ -153,6 +157,36 @@ export default function SettingsPage() {
             </button>
           </form>
         </div>
+
+        {profile.role === "customer" && (
+          <>
+            <hr className="settings-divider" />
+            <div className="settings-section">
+              <h2>Staff Access</h2>
+              <p className="settings-staff-desc">
+                Want to help manage the catalog? Apply for staff access.
+              </p>
+              <Link to="/apply-staff" className="btn-staff-apply">
+                <ShieldCheck size={16} />
+                Apply for Staff
+              </Link>
+            </div>
+          </>
+        )}
+
+        {(profile.role === "staff" || profile.role === "manager") && (
+          <>
+            <hr className="settings-divider" />
+            <div className="settings-section">
+              <h2>Staff Access</h2>
+              <Badge variant="success" size="md">You have {profile.role} access</Badge>
+              <Link to="/admin" className="btn-staff-apply" style={{ marginTop: "var(--space-3)" }}>
+                <ShieldCheck size={16} />
+                Go to Admin Console
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

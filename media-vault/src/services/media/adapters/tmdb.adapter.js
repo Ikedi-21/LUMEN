@@ -21,3 +21,14 @@ export function normalizeMovie(item) {
     source: "api",
   };
 }
+
+/**
+ * Normalizes a paginated TMDB response into { items, hasMore }.
+ */
+export function normalizeMoviePage(response) {
+  const results = response.results || [];
+  return {
+    items: results.map(normalizeMovie),
+    hasMore: (response.page || 1) < (response.total_pages || 1),
+  };
+}

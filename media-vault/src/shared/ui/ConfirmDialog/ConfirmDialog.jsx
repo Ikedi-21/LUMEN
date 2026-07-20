@@ -1,6 +1,6 @@
 import "./ConfirmDialog.css";
 
-export default function ConfirmDialog({ isOpen, title = "Confirm Action", message = "Are you sure you want to perform this action?", onConfirm, onCancel }) {
+export default function ConfirmDialog({ isOpen, title = "Confirm Action", message = "Are you sure you want to perform this action?", confirmLabel = "Delete", onConfirm, onCancel }) {
   if (!isOpen) return null;
 
   return (
@@ -13,7 +13,7 @@ export default function ConfirmDialog({ isOpen, title = "Confirm Action", messag
             Cancel
           </button>
           <button className="btn-confirm-action" onClick={onConfirm}>
-            Delete
+            {confirmLabel}
           </button>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "./MediaCard.css";
 
-export default function MediaCard({ item, index }) {
+export default function MediaCard({ item, index, progress }) {
   const displayType = item.type ? item.type.charAt(0).toUpperCase() + item.type.slice(1) : "";
   const displayYear = item.releaseDate ? item.releaseDate.substring(0, 4) : "";
   const displayRating = item.rating ? Number(item.rating).toFixed(1) : null;
@@ -22,20 +22,30 @@ export default function MediaCard({ item, index }) {
           </div>
         )}
         {displayType && <span className="media-card-badge">{displayType}</span>}
+        {displayRating && <span className="media-card-rating-badge">★ {displayRating}</span>}
         
         {/* Hover info overlay */}
         <div className="media-card-overlay">
           {displayRating && <span className="overlay-rating">★ {displayRating}</span>}
           {primaryGenre && <span className="overlay-genre">{primaryGenre}</span>}
         </div>
+
+        {progress != null && (
+          <div className="media-card-progress">
+            <div className="media-card-progress-bar">
+              <div className="media-card-progress-fill" style={{ width: `${Math.min(progress.percentComplete, 100)}%` }} />
+            </div>
+            {progress.lastPositionText && (
+              <span className="media-card-progress-label">{progress.lastPositionText}</span>
+            )}
+          </div>
+        )}
       </div>
       <div className="media-card-info">
         <h3>{item.title}</h3>
         <div className="media-card-meta">
-          {item.rating ? (
+          {item.rating && (
             <span className="media-card-rating">★ {Number(item.rating).toFixed(1)}</span>
-          ) : (
-            <span className="media-card-rating-empty">Unrated</span>
           )}
           {displayYear && <span className="media-card-year">{displayYear}</span>}
         </div>

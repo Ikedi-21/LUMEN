@@ -72,8 +72,8 @@
 }
 
 .reader-genre-badge {
-  background-color: rgba(196, 162, 77, 0.15);
-  color: #c4a24d;
+  background-color: rgba(212, 175, 55, 0.15);
+  color: var(--accent-secondary);
   padding: 0.3rem 0.8rem;
   border-radius: 999px;
   font-size: 0.85rem;
@@ -131,12 +131,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, background-color 0.2s ease;
-  box-shadow: 0 4px 14px rgba(156, 59, 50, 0.4);
+  box-shadow: 0 4px 14px rgba(184, 99, 46, 0.4);
 }
 
 .btn-read-full:hover {
   transform: translateY(-2px);
-  background-color: #b8473c;
+  background-color: #CC7340;
 }
 
 .btn-back-info {

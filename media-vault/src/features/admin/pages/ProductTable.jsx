@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAdminProducts, removeProduct } from "@/services/products";
-import { ConfirmDialog, useToast } from "@/shared/ui";
+import { ConfirmDialog, useToast, Badge } from "@/shared/ui";
 import "./AdminPages.css";
 
 export default function ProductTable() {
@@ -28,7 +28,21 @@ export default function ProductTable() {
   }
 
   useEffect(() => {
-    loadProducts();
+    let active = true;
+    getAdminProducts()
+      .then((items) => {
+        if (active) {
+          setProducts(items);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch admin products:", err);
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   function triggerDeletePrompt(id, title) {
@@ -109,15 +123,7 @@ export default function ProductTable() {
                     </td>
                     <td><strong>{p.title}</strong><br /><span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>{p.creator}</span></td>
                     <td>
-                      <span style={{
-                        fontSize: "0.8rem",
-                        padding: "3px 8px",
-                        backgroundColor: "var(--card-surface)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "4px"
-                      }}>
-                        {displayType}
-                      </span>
+                      <Badge variant="default">{displayType}</Badge>
                     </td>
                     <td><strong>{formattedPrice}</strong></td>
                     <td>

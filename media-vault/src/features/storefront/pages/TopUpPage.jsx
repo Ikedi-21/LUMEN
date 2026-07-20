@@ -3,6 +3,7 @@ import { useAuth } from "@/features/auth";
 import { useStorefront } from "../context";
 import { addCoins } from "@/services/coins";
 import { useToast } from "@/shared/ui";
+import { formatCoinsAsCurrency } from "@/shared/lib/pricing";
 import "./TopUpPage.css";
 
 const PACKAGES = [
@@ -13,7 +14,7 @@ const PACKAGES = [
 
 export default function TopUpPage() {
   const { user } = useAuth();
-  const { refreshCoins } = useStorefront();
+  const { refreshCoins, coins } = useStorefront();
   const { addToast } = useToast();
   const [loading, setLoading] = useState(false);
 
@@ -43,6 +44,12 @@ export default function TopUpPage() {
       <div className="topup-header">
         <h1>Coin Store</h1>
         <p>Purchase coins to instantly unlock premium movies, books, and comics.</p>
+        {user && (
+          <p className="topup-balance">
+            Your balance: <strong>{coins.toLocaleString()} coins</strong>{" "}
+            <span className="topup-balance-currency">({formatCoinsAsCurrency(coins)})</span>
+          </p>
+        )}
       </div>
 
       <div className="topup-packages">
@@ -52,17 +59,18 @@ export default function TopUpPage() {
               <h3>{pkg.title}</h3>
               <span className="topup-bonus">{pkg.bonus}</span>
             </div>
-            <div className="topup-card-coins">
-              <span className="coins-amount">{pkg.coins}</span>
-              <span className="coins-label">Coins</span>
+            <div className="topup-card-coins" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", margin: "1.5rem 0" }}>
+              <span className="coins-amount" style={{ fontSize: "1.8rem" }}>{pkg.coins}</span>
+              <span style={{ color: "var(--text-secondary)", fontSize: "1.2rem" }}>Coins</span>
+              <span style={{ color: "var(--text-secondary)", fontSize: "1.2rem", margin: "0 0.25rem" }}>for</span>
+              <span className="coins-price-val" style={{ color: "var(--accent-secondary)", fontSize: "1.8rem", fontWeight: "bold" }}>{pkg.price}</span>
             </div>
-            <div className="topup-card-price">{pkg.price}</div>
             <button 
               className="btn-primary btn-purchase"
               onClick={() => handlePurchase(pkg)}
               disabled={loading}
             >
-              {loading ? "Processing..." : `Buy for ${pkg.price}`}
+              {loading ? "Processing..." : `Buy Package`}
             </button>
           </div>
         ))}

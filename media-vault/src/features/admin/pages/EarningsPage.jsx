@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/features/auth";
-import { useToast } from "@/shared/ui";
+import { useToast, Badge } from "@/shared/ui";
 import { getUserCoins } from "@/services/coins/coins.service";
 import { createPayoutRequest, getUserPayoutRequests } from "@/services/payouts";
 import "./AdminPages.css";
 
 export default function EarningsPage() {
-  const { user, profile, refreshProfile } = useAuth();
+  const { user, refreshProfile } = useAuth();
   const { addToast } = useToast();
   
   const [coins, setCoins] = useState(0);
@@ -16,10 +16,29 @@ export default function EarningsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    let active = true;
     if (user) {
-      loadEarningsData();
+      Promise.all([
+        getUserCoins(user.id),
+        getUserPayoutRequests(user.id),
+      ])
+        .then(([currentCoins, requestHistory]) => {
+          if (active) {
+            setCoins(currentCoins);
+            setRequests(requestHistory);
+            setLoading(false);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to load earnings data:", err);
+          addToast("Failed to load earnings information.", "error");
+          if (active) setLoading(false);
+        });
     }
-  }, [user]);
+    return () => {
+      active = false;
+    };
+  }, [user, addToast]);
 
   async function loadEarningsData() {
     setLoading(true);
@@ -135,18 +154,14 @@ export default function EarningsPage() {
                   </thead>
                   <tbody>
                     {requests.map((req) => {
-                      let badgeClass = "status-suspended"; // pending (amber)
-                      if (req.status === "approved") badgeClass = "status-active"; // green
-                      if (req.status === "rejected") badgeClass = "status-banned"; // red
+                      const variant = req.status === "approved" ? "success" : req.status === "rejected" ? "danger" : "warning";
 
                       return (
                         <tr key={req.id}>
                           <td>{new Date(req.requested_at).toLocaleDateString()}</td>
                           <td><strong>{req.coins_requested}</strong></td>
                           <td>
-                            <span className={`status-badge ${badgeClass}`}>
-                              {req.status}
-                            </span>
+                            <Badge variant={variant}>{req.status}</Badge>
                           </td>
                         </tr>
                       );

@@ -1,5 +1,5 @@
-﻿import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth";
 import { getWishlistItems, removeFromWishlist } from "@/services/wishlist";
 import { getMediaById } from "@/services/media";
@@ -64,7 +64,7 @@ export default function WishlistPage() {
     }
 
     loadWishlistData();
-  }, [user, authLoading]);
+  }, [user, authLoading, navigate]);
 
   async function handleRemove(productId) {
     try {

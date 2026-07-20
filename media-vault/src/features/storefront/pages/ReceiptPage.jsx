@@ -35,7 +35,7 @@ export default function ReceiptPage() {
             const displayType = item.type ? item.type.charAt(0).toUpperCase() + item.type.slice(1) : "";
             const isMovie = item.type === "movie";
             const actionText = isMovie ? "Watch trailer" : "Read preview";
-            const actionLink = isMovie ? `/watch/${item.id}` : `/preview/${item.type}/${item.id}`;
+            const actionLink = isMovie ? `/watch/${item.id}` : `/product/${item.type}/${item.id}?preview=true`;
 
             return (
               <div key={item.id} className="receipt-item">

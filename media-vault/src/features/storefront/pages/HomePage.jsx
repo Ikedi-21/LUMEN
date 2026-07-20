@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getMediaByType } from "@/services/media";
-import { HeroBanner, MediaRail } from "@/shared/ui";
+import { HeroBanner, MediaRail, ContinueRail } from "@/shared/ui";
 
 const SECTIONS = [
   { type: "movie", title: "Movies" },
@@ -84,6 +84,8 @@ export default function HomePage() {
       ) : displayFeatured.length > 0 ? (
         <HeroBanner items={displayFeatured} />
       ) : null}
+      
+      {sectionFilter === "all" && <ContinueRail />}
       
       {filteredSections.map((s) => (
         <MediaRail key={s.type} title={s.title} items={data[s.type] || []} loading={loading} />

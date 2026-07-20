@@ -22,3 +22,17 @@ export function normalizeComic(item) {
   };
 }
 
+/**
+ * Normalizes a paginated Comic Vine response into { items, hasMore }.
+ * Uses offset + results.length vs total_results to determine if more exist.
+ */
+export function normalizeComicPage(response) {
+  const results = response.results || [];
+  const offset = response.offset || 0;
+  const total = response.total_results || 0;
+  return {
+    items: results.map(normalizeComic),
+    hasMore: offset + results.length < total,
+  };
+}
+

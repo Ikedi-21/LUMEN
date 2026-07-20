@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/features/auth";
 import { getCartItems, removeFromCart } from "@/services/cart";
@@ -9,13 +9,14 @@ import { useStorefront } from "../context";
 import { useToast } from "@/shared/ui";
 import { EmptyState } from "@/shared/ui";
 import { ShoppingCart } from "lucide-react";
+import { formatCoinsAsCurrency } from "@/shared/lib/pricing";
 import "./CartPage.css";
 
 export default function CartPage() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { addToast } = useToast();
-  const { cartCount, coins, refreshCart, refreshCoins } = useStorefront();
+  const { coins, refreshCart, refreshCoins } = useStorefront();
 
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -66,11 +67,7 @@ export default function CartPage() {
     }
 
     loadCartData();
-  }, [user, authLoading]);
-
-  function handleTopUp() {
-    navigate("/top-up");
-  }
+  }, [user, authLoading, navigate]);
 
   async function handleRemove(productId) {
     try {
@@ -161,6 +158,10 @@ export default function CartPage() {
     }
   }
 
+  const totalCost = cartItems.length;
+  const shortfall = Math.max(0, totalCost - coins);
+  const canAfford = coins >= totalCost;
+
   return (
     <div className="cart-page">
       <h1 className="cart-title">Your Shopping Cart</h1>
@@ -174,11 +175,10 @@ export default function CartPage() {
             actionTo="/"
           />
       ) : (
-        <>
+        <div className="cart-layout">
+          {/* Cart items list */}
           <div className="cart-list">
             {cartItems.map((item) => {
-              const itemPrice = item.product.price || 0;
-              const formattedPrice = `â‚¦${(itemPrice / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
               const displayType = item.product.type ? item.product.type.charAt(0).toUpperCase() + item.product.type.slice(1) : "";
 
               return (
@@ -210,33 +210,64 @@ export default function CartPage() {
             })}
           </div>
 
-          <div className="cart-summary">
-            <div className="cart-total-row">
-              <span>Total Cost:</span>
-              <span className="cart-total-value">{cartItems.length} coins</span>
+          {/* Sticky order summary sidebar */}
+          <aside className="cart-order-summary">
+            <h2 className="order-summary-title">Order Summary</h2>
+
+            <div className="order-summary-items">
+              {cartItems.map((item) => (
+                <div key={item.product_id} className="order-summary-item">
+                  <span className="order-summary-item-title">{item.product.title}</span>
+                  <span className="order-summary-item-cost">1 coin</span>
+                </div>
+              ))}
             </div>
-            
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              <button 
-                className="btn-checkout" 
-                onClick={handleCheckout}
-                disabled={checkoutLoading || coins < cartItems.length}
-              >
-                {checkoutLoading ? "Processing..." : `Checkout`}
-              </button>
-              
-              {coins < cartItems.length && (
-                <p style={{ fontSize: "0.85rem", color: "var(--danger)", textAlign: "center" }}>
-                  You need {cartItems.length - coins} more coins. <Link to="/top-up" style={{ color: "var(--accent-primary)", textDecoration: "underline" }}>Get more coins</Link>
-                </p>
-              )}
+
+            <div className="order-summary-divider" />
+
+            <div className="order-summary-row">
+              <span>Total ({cartItems.length} {cartItems.length === 1 ? "item" : "items"})</span>
+              <span className="order-summary-coins">
+                {totalCost} {totalCost === 1 ? "coin" : "coins"}{" "}
+                <span className="order-summary-currency">{formatCoinsAsCurrency(totalCost)}</span>
+              </span>
             </div>
-          </div>
-        </>
+
+            <div className="order-summary-divider" />
+
+            <div className="order-summary-row">
+              <span>Your Balance</span>
+              <span className="order-summary-balance">
+                {coins.toLocaleString()} coins{" "}
+                <span className="order-summary-currency">{formatCoinsAsCurrency(coins)}</span>
+              </span>
+            </div>
+
+            {!canAfford && (
+              <div className="order-summary-shortfall">
+                <span className="shortfall-label">
+                  You need <strong>{shortfall} more {shortfall === 1 ? "coin" : "coins"}</strong>{" "}
+                  ({formatCoinsAsCurrency(shortfall)})
+                </span>
+                <Link 
+                  to="/top-up" 
+                  className="btn-topup-shortfall"
+                >
+                  Top up {shortfall} {shortfall === 1 ? "coin" : "coins"}
+                </Link>
+              </div>
+            )}
+
+            <button 
+              className="btn-checkout" 
+              onClick={handleCheckout}
+              disabled={checkoutLoading || !canAfford || cartItems.length === 0}
+            >
+              {checkoutLoading ? "Processing..." : "Checkout"}
+            </button>
+          </aside>
+        </div>
       )}
     </div>
   );
 }
-
-
-

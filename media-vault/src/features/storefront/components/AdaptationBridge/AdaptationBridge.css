@@ -1,0 +1,202 @@
+/* ── Adaptation Bridge ──────────────────────────────────────────────── */
+
+.adaptation-bridge {
+  padding: var(--space-7) var(--space-6) 0;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.adaptation-bridge-title {
+  font-size: 1.5rem;
+  margin-bottom: var(--space-4);
+  color: var(--text-primary);
+  border-left: 3px solid var(--accent-primary);
+  padding-left: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.adaptation-bridge-label {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Horizontal scroll — mirrors MediaRail pattern ──────────────── */
+
+.adaptation-bridge-scroll {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  overflow-x: auto;
+  padding: var(--space-3) var(--space-2) var(--space-5);
+  margin-left: calc(-1 * var(--space-2));
+  margin-right: calc(-1 * var(--space-2));
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg);
+}
+
+.adaptation-bridge-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.adaptation-bridge-scroll::-webkit-scrollbar-track {
+  background: rgba(16, 14, 12, 0.5);
+  border-radius: var(--radius-card);
+}
+
+.adaptation-bridge-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-card);
+  transition: background 0.3s ease;
+}
+
+.adaptation-bridge-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
+}
+
+/* ── Step (card + connector wrapper) ────────────────────────────── */
+
+.adaptation-bridge-step {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* ── Card ───────────────────────────────────────────────────────── */
+
+.adaptation-bridge-card {
+  display: flex;
+  flex-direction: column;
+  width: 160px;
+  border-radius: var(--radius-card);
+  background: var(--card-surface);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.adaptation-bridge-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.adaptation-bridge-card--current {
+  box-shadow: 0 0 0 2px var(--accent-primary), var(--shadow-card);
+}
+
+.adaptation-bridge-card--current:hover {
+  box-shadow: 0 0 0 2px var(--accent-primary), var(--shadow-card-hover);
+}
+
+.adaptation-bridge-card-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.adaptation-bridge-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adaptation-bridge-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.adaptation-bridge-card-badge {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  padding: 2px 8px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--accent-secondary);
+  color: var(--text-on-secondary);
+  border-radius: var(--radius-pill);
+}
+
+.adaptation-bridge-card-info {
+  padding: var(--space-3);
+}
+
+.adaptation-bridge-card-info h3 {
+  font-size: 0.85rem;
+  margin: 0 0 2px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adaptation-bridge-card-info p {
+  font-size: 0.75rem;
+  margin: 0;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── "Current" tag ──────────────────────────────────────────────── */
+
+.adaptation-bridge-current-tag {
+  position: absolute;
+  bottom: var(--space-2);
+  right: var(--space-2);
+  padding: 2px 8px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--accent-primary);
+  color: var(--text-on-primary);
+  border-radius: var(--radius-pill);
+}
+
+/* ── Connector arrow ────────────────────────────────────────────── */
+
+.adaptation-bridge-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  color: var(--accent-secondary);
+  opacity: 0.7;
+}
+
+/* ── Mobile ─────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .adaptation-bridge {
+    padding: var(--space-5) var(--space-4) 0;
+  }
+
+  .adaptation-bridge-title {
+    font-size: 1.25rem;
+  }
+
+  .adaptation-bridge-card {
+    width: 130px;
+  }
+}

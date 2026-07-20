@@ -1,10 +1,11 @@
-﻿import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "@/shared/ui";
 import { useAuth } from "@/features/auth";
 import { useStorefront } from "../../context";
-import { useToast } from "@/shared/ui";
-import { ShoppingCart, Heart, Coins, Search, Menu, X } from "lucide-react";
+
+import { ShoppingCart, Heart, Coins, Search, Menu, X, Settings, LogOut, BookOpen, Shield } from "lucide-react";
+import { formatCoinsAsCurrency } from "@/shared/lib/pricing";
 import "./Navbar.css";
 import "./NavbarDropdown.css";
 
@@ -78,9 +79,15 @@ export default function Navbar() {
           </Link>
           {user ? (
             <>
-              <button onClick={handleTopUp} className="navbar-icon coin-balance" title="Get more coins" style={{ background: "none", cursor: "pointer", fontFamily: "inherit", border: "none" }}>
+              <button 
+                onClick={handleTopUp} 
+                className="navbar-icon coin-balance" 
+                title={`Balance: ${formatCoinsAsCurrency(coins)}`} 
+                style={{ background: "none", cursor: "pointer", fontFamily: "inherit", border: "none" }}
+              >
                 <Coins size={20} />
                 <span>{coins}</span>
+                <span className="coin-currency-hint">{formatCoinsAsCurrency(coins)}</span>
               </button>
 
               <Link to="/wishlist" className="navbar-icon badge-container" title="Wishlist">
@@ -113,8 +120,6 @@ export default function Navbar() {
                     <hr className="dropdown-divider" />
                     <Link to="/settings" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Settings</Link>
                     <Link to="/library" className="dropdown-item" onClick={() => setDropdownOpen(false)}>My Library</Link>
-                    <Link to="/wishlist" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Wishlist</Link>
-                    <Link to="/cart" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Cart</Link>
                     {(profile?.role === "staff" || profile?.role === "manager") && (
                       <Link to="/admin" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Admin Panel</Link>
                     )}
@@ -160,6 +165,56 @@ export default function Navbar() {
                 </Link>
               ))}
             </div>
+
+            {user && (
+              <div className="mobile-menu-actions">
+                <Link to="/search" className="mobile-menu-action" onClick={() => setMenuOpen(false)}>
+                  <Search size={18} />
+                  <span>Search</span>
+                </Link>
+                <Link to="/library" className="mobile-menu-action" onClick={() => setMenuOpen(false)}>
+                  <BookOpen size={18} />
+                  <span>My Library</span>
+                </Link>
+                <Link to="/cart" className="mobile-menu-action" onClick={() => setMenuOpen(false)}>
+                  <ShoppingCart size={18} />
+                  <span>Cart</span>
+                  {cartCount > 0 && <span className="mobile-menu-badge">{cartCount}</span>}
+                </Link>
+                <Link to="/wishlist" className="mobile-menu-action" onClick={() => setMenuOpen(false)}>
+                  <Heart size={18} />
+                  <span>Wishlist</span>
+                  {wishlistCount > 0 && <span className="mobile-menu-badge">{wishlistCount}</span>}
+                </Link>
+                <button
+                  className="mobile-menu-action"
+                  onClick={() => { setMenuOpen(false); handleTopUp(); }}
+                  style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", width: "100%", textAlign: "left" }}
+                >
+                  <Coins size={18} />
+                  <span className="mobile-menu-coin-balance">{coins} coins ({formatCoinsAsCurrency(coins)})</span>
+                  <span className="mobile-menu-topup-label">Top up</span>
+                </button>
+                <Link to="/settings" className="mobile-menu-action" onClick={() => setMenuOpen(false)}>
+                  <Settings size={18} />
+                  <span>Settings</span>
+                </Link>
+                {(profile?.role === "staff" || profile?.role === "manager") && (
+                  <Link to="/admin" className="mobile-menu-action" onClick={() => setMenuOpen(false)}>
+                    <Shield size={18} />
+                    <span>Admin Panel</span>
+                  </Link>
+                )}
+                <button
+                  className="mobile-menu-action mobile-menu-logout"
+                  onClick={() => { setMenuOpen(false); signOut(); }}
+                >
+                  <LogOut size={18} />
+                  <span>Logout</span>
+                </button>
+              </div>
+            )}
+
             {!user && (
               <Link
                 to="/login"

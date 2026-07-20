@@ -1,4 +1,4 @@
-﻿.navbar {
+.navbar {
   position: sticky;
   top: 0;
   display: flex;
@@ -79,7 +79,7 @@
 }
 .navbar-icon:hover {
   color: var(--text-primary);
-  border-color: rgba(196, 162, 77, 0.3);
+  border-color: rgba(212, 175, 55, 0.3);
   background-color: var(--card-surface);
 }
 .badge-container {
@@ -109,7 +109,13 @@
 }
 .coin-balance:hover {
   color: var(--accent-primary);
-  background-color: rgba(196, 162, 77, 0.1);
+  background-color: rgba(212, 175, 55, 0.1);
+}
+.coin-currency-hint {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.8;
 }
 
 .mobile-menu-overlay {
@@ -164,6 +170,64 @@
   color: var(--text-on-primary);
   border-radius: var(--radius-card);
   font-weight: 500;
+}
+
+.mobile-menu-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+.mobile-menu-action {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-2);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(58, 52, 46, 0.5);
+  transition: background-color 0.2s ease;
+}
+.mobile-menu-action:hover {
+  background-color: var(--card-surface);
+}
+.mobile-menu-badge {
+  margin-left: auto;
+  background-color: var(--accent-primary);
+  color: var(--text-on-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+}
+.mobile-menu-coin-balance {
+  color: var(--accent-secondary);
+  font-weight: 600;
+}
+.mobile-menu-topup-label {
+  margin-left: auto;
+  color: var(--accent-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mobile-menu-logout {
+  color: var(--danger);
+  margin-top: var(--space-2);
+}
+
+.mobile-menu-logout:hover {
+  background-color: rgba(229, 72, 77, 0.08);
 }
 
 @keyframes fadeIn {

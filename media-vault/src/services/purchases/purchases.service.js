@@ -64,3 +64,41 @@ export async function removePurchase(userId, productId) {
   if (error) throw error;
 }
 
+export function saveProgress(userId, productId, percentComplete, lastPositionText) {
+  const key = `lumen-progress-${userId}`;
+  let progressMap = {};
+  try {
+    progressMap = JSON.parse(localStorage.getItem(key) || "{}");
+  } catch (e) {
+    console.error("Failed to parse progress data:", e);
+  }
+  progressMap[productId] = {
+    percentComplete,
+    lastPositionText,
+    updatedAt: new Date().toISOString()
+  };
+  localStorage.setItem(key, JSON.stringify(progressMap));
+}
+
+export function getProgress(userId, productId) {
+  const key = `lumen-progress-${userId}`;
+  try {
+    const progressMap = JSON.parse(localStorage.getItem(key) || "{}");
+    return progressMap[productId] || null;
+  } catch (e) {
+    console.error("Failed to read progress:", e);
+    return null;
+  }
+}
+
+export function getAllProgress(userId) {
+  const key = `lumen-progress-${userId}`;
+  try {
+    return JSON.parse(localStorage.getItem(key) || "{}");
+  } catch (e) {
+    console.error("Failed to get all progress:", e);
+    return {};
+  }
+}
+
+

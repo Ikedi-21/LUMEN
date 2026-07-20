@@ -35,14 +35,26 @@ export async function getUserPayoutRequests(userId) {
 export async function getAllPayoutRequests() {
   const { data, error } = await supabase
     .from("payout_requests")
-    .select(`
-      *,
-      profiles:user_id(username, email)
-    `)
+    .select("*")
     .order("requested_at", { ascending: false });
 
   if (error) throw error;
-  return data || [];
+
+  if (!data || data.length === 0) return [];
+
+  const userIds = [...new Set(data.map(r => r.user_id))];
+  const { data: profiles } = await supabase
+    .from("profiles")
+    .select("id, username, email")
+    .in("id", userIds);
+
+  const profileMap = {};
+  (profiles || []).forEach(p => { profileMap[p.id] = p; });
+
+  return data.map(req => ({
+    ...req,
+    profiles: profileMap[req.user_id] || null,
+  }));
 }
 
 export async function reviewPayoutRequest(requestId, status, reviewerId) {

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import RoleGuard from "@/shared/guards/RoleGuard";
 import { useAuth } from "@/features/auth";
-import { useToast } from "@/shared/ui";
+import { useToast, Badge } from "@/shared/ui";
 import { getAllPayoutRequests, reviewPayoutRequest } from "@/services/payouts";
+import { CheckCircle, XCircle } from "lucide-react";
 import "../../admin/pages/AdminPages.css";
 import "./PayoutReviewPage.css";
 
@@ -15,6 +16,7 @@ export default function PayoutReviewPage() {
 
   useEffect(() => {
     fetchRequests();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function fetchRequests() {
@@ -40,7 +42,6 @@ export default function PayoutReviewPage() {
     try {
       await reviewPayoutRequest(requestId, status, currentProfile.id);
       addToast(`Payout request ${status} successfully!`, "success");
-      // Refresh request list
       await fetchRequests();
     } catch (err) {
       console.error(`Failed to review payout request:`, err);
@@ -84,10 +85,7 @@ export default function PayoutReviewPage() {
                 {requests.map((req) => {
                   const requesterName = req.profiles?.username || req.profiles?.email || "Unknown User";
                   const isPending = req.status === "pending";
-                  
-                  let badgeClass = "status-suspended"; // pending (amber)
-                  if (req.status === "approved") badgeClass = "status-active"; // green
-                  if (req.status === "rejected") badgeClass = "status-banned"; // red
+                  const variant = req.status === "approved" ? "success" : req.status === "rejected" ? "danger" : "warning";
 
                   return (
                     <tr key={req.id}>
@@ -99,32 +97,28 @@ export default function PayoutReviewPage() {
                         <strong>{req.coins_requested}</strong>
                       </td>
                       <td>
-                        <span className={`status-badge ${badgeClass}`}>
-                          {req.status}
-                        </span>
+                        <Badge variant={variant}>{req.status}</Badge>
                       </td>
                       <td>
                         {isPending ? (
-                          <div className="admin-table-actions">
+                          <div className="payout-actions">
                             <button
                               onClick={() => handleReview(req.id, "approved", req.coins_requested, requesterName)}
-                              className="btn-admin-action btn-admin-primary"
-                              style={{ padding: "6px 12px", fontSize: "0.85rem" }}
+                              className="btn-action btn-payout-approve"
                             >
-                              Approve
+                              <CheckCircle size={14} />
+                              <span>Approve</span>
                             </button>
                             <button
                               onClick={() => handleReview(req.id, "rejected", req.coins_requested, requesterName)}
-                              className="btn-admin-action btn-admin-danger"
-                              style={{ padding: "6px 12px", fontSize: "0.85rem" }}
+                              className="btn-action btn-payout-reject"
                             >
-                              Reject
+                              <XCircle size={14} />
+                              <span>Reject</span>
                             </button>
                           </div>
                         ) : (
-                          <span style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>
-                            Processed
-                          </span>
+                          <Badge variant="default" size="sm">Processed</Badge>
                         )}
                       </td>
                     </tr>

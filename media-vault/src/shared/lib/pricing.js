@@ -17,3 +17,23 @@ export function generatePrice(id, rating = 0) {
   const ratingBonus = rating ? Math.round(rating * 300) : 0;
   return basePrice + ratingBonus;
 }
+
+/**
+ * Coins-to-currency conversion rate.
+ * 1 coin = $0.01 USD. Defined once, reused everywhere.
+ */
+export const COINS_TO_USD = 0.01;
+
+/**
+ * Formats a coin amount as a real-currency equivalent string.
+ * e.g. formatCoinCurrency(1240) → "~$12.40"
+ */
+export function formatCoinCurrency(coins) {
+  const usd = (coins * COINS_TO_USD).toFixed(2);
+  return `~$${usd}`;
+}
+
+export function formatCoinsAsCurrency(coins) {
+  const usd = (coins * COINS_TO_USD).toFixed(2);
+  return `$${usd}`;
+}

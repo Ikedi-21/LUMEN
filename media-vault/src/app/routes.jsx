@@ -3,8 +3,8 @@ import StorefrontLayout from "./layouts/StorefrontLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import MinimalLayout from "./layouts/MinimalLayout";
 
-import { HomePage, BrowsePage, ProductDetailPage, SearchPage, CartPage, WishlistPage, LibraryPage, WatchPage, PreviewPage, ReceiptPage, TopUpPage } from "@/features/storefront";
-import { LoginPage, SignupPage, SettingsPage } from "@/features/auth";
+import { HomePage, BrowsePage, ProductDetailPage, SearchPage, CartPage, WishlistPage, LibraryPage, WatchPage, ReceiptPage, TopUpPage } from "@/features/storefront";
+import { LoginPage, SignupPage, SettingsPage, StaffApplicationPage } from "@/features/auth";
 import { AdminDashboardPage, ProductTable, ProductForm, EarningsPage } from "@/features/admin";
 import { StaffPage, PayoutReviewPage } from "@/features/manager";
 
@@ -21,10 +21,10 @@ export default function AppRoutes() {
         <Route path="wishlist" element={<WishlistPage />} />
         <Route path="library" element={<LibraryPage />} />
         <Route path="watch/:id" element={<WatchPage />} />
-        <Route path="preview/:type/:id" element={<PreviewPage />} />
         <Route path="receipt" element={<ReceiptPage />} />
         <Route path="top-up" element={<TopUpPage />} />
         <Route path="settings" element={<SettingsPage />} />
+        <Route path="apply-staff" element={<StaffApplicationPage />} />
       </Route>
 
       {/* Auth / Minimal Layout Routes */}

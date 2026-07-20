@@ -1,13 +1,13 @@
 .payout-review-page {
-  padding: 1.5rem;
+  text-align: left;
 }
 
 .simulation-note {
-  background-color: rgba(196, 162, 77, 0.08);
-  border: 1px solid rgba(196, 162, 77, 0.25);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 2rem;
+  background-color: rgba(var(--accent-secondary-rgb), 0.08);
+  border: 1px solid rgba(var(--accent-secondary-rgb), 0.25);
+  border-radius: var(--radius-card);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-6);
   text-align: left;
 }
 
@@ -15,7 +15,7 @@
   color: var(--accent-secondary);
   font-size: 1rem;
   display: block;
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--space-1);
 }
 
 .simulation-note p {
@@ -23,4 +23,56 @@
   font-size: 0.9rem;
   line-height: 1.5;
   margin: 0;
+}
+
+/* ── Payout action buttons ────────────────────────────────── */
+
+.payout-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.btn-payout-approve {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: var(--radius-card);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(var(--success-rgb), 0.25);
+  background-color: rgba(var(--success-rgb), 0.08);
+  color: var(--success);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-payout-approve:hover {
+  background-color: rgba(var(--success-rgb), 0.2);
+  border-color: rgba(var(--success-rgb), 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-payout-reject {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: var(--radius-card);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(var(--danger-rgb), 0.2);
+  background-color: rgba(var(--danger-rgb), 0.06);
+  color: var(--danger);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-payout-reject:hover {
+  background-color: rgba(var(--danger-rgb), 0.18);
+  border-color: rgba(var(--danger-rgb), 0.45);
+  transform: translateY(-1px);
 }

@@ -1,20 +1,20 @@
 const BASE_URL = "https://api.themoviedb.org/3";
 const KEY = import.meta.env.VITE_TMDB_KEY;
 
-export async function fetchPopularMovies() {
-  const res = await fetch(`${BASE_URL}/movie/popular?api_key=${KEY}`);
+export async function fetchPopularMovies(page = 1) {
+  const res = await fetch(`${BASE_URL}/movie/popular?api_key=${KEY}&page=${page}`);
   if (!res.ok) throw new Error("TMDB request failed");
   const data = await res.json();
-  return data.results;
+  return { results: data.results, page: data.page, total_pages: data.total_pages };
 }
 
-export async function searchMovies(query) {
+export async function searchMovies(query, page = 1) {
   const res = await fetch(
-    `${BASE_URL}/search/movie?api_key=${KEY}&query=${encodeURIComponent(query)}`
+    `${BASE_URL}/search/movie?api_key=${KEY}&query=${encodeURIComponent(query)}&page=${page}`
   );
   if (!res.ok) throw new Error("TMDB search failed");
   const data = await res.json();
-  return data.results;
+  return { results: data.results, page: data.page, total_pages: data.total_pages };
 }
 
 export async function fetchMovieTrailer(tmdbId) {

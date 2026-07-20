@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --bg: #100E0C;
   --surface: #1B1815;
   --card-surface: #24201C;
@@ -7,14 +7,21 @@
   --text-primary: #F1EAE0;
   --text-secondary: #A9A093;
 
-  --accent-primary: #9C3B32;
-  --accent-secondary: #C4A24D;
+  --accent-primary: #B8632E;
+  --accent-primary-rgb: 184, 99, 46;
+  --accent-primary-hover: color-mix(in srgb, var(--accent-primary) 85%, black);
+  --accent-secondary: #D4AF37;
+  --accent-secondary-rgb: 212, 175, 55;
 
   --text-on-primary: #F1EAE0;
   --text-on-secondary: #100E0C;
 
   --danger: #E5484D;
+  --danger-rgb: 229, 72, 77;
   --success: #7FA65C;
+  --success-rgb: 127, 166, 92;
+  --info: #7C93A8;
+  --info-rgb: 124, 147, 168;
 
   --space-1: 4px;
   --space-2: 8px;
@@ -30,7 +37,7 @@
 
   --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.35);
   --shadow-card-hover: 0 8px 28px rgba(0, 0, 0, 0.5);
-  --glow-accent: 0 0 0 1px rgba(196, 162, 77, 0.4), 0 0 20px rgba(196, 162, 77, 0.15);
+  --glow-accent: 0 0 0 1px rgba(212, 175, 55, 0.4), 0 0 20px rgba(212, 175, 55, 0.15);
 
   --font-display: "Playfair Display", Georgia, serif;
   --font-body: "Inter", -apple-system, sans-serif;

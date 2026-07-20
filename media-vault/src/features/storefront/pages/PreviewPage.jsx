@@ -15,35 +15,50 @@ export default function PreviewPage() {
   const [error, setError] = useState(null);
   const [showReader, setShowReader] = useState(false);
 
-  useEffect(() => {
-    if (user && id && type) {
-      checkAccessAndLoad();
-    } else if (!authLoading && !user) {
-      setLoading(false);
-    }
-  }, [user, id, type, authLoading]);
 
-  async function checkAccessAndLoad() {
-    setLoading(true);
-    try {
-      const isOwned = await hasPurchased(user.id, id);
-      setPurchased(isOwned);
-      
-      if (isOwned) {
-        const product = await getMediaById(type, id);
-        if (product) {
-          setItem(product);
-        } else {
-          setError("Item details could not be found.");
-        }
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Failed to verify access or load content.");
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    let active = true;
+    if (authLoading) return;
+
+    if (!user) {
+      const timer = setTimeout(() => {
+        if (active) setLoading(false);
+      }, 0);
+      return () => clearTimeout(timer);
     }
-  }
+
+    if (id && type) {
+      hasPurchased(user.id, id)
+        .then((isOwned) => {
+          if (!active) return;
+          setPurchased(isOwned);
+          if (isOwned) {
+            return getMediaById(type, id);
+          }
+        })
+        .then((product) => {
+          if (!active) return;
+          if (product !== undefined) {
+            if (product) {
+              setItem(product);
+            } else {
+              setError("Item details could not be found.");
+            }
+          }
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          if (active) {
+            setError("Failed to verify access or load content.");
+            setLoading(false);
+          }
+        });
+    }
+    return () => {
+      active = false;
+    };
+  }, [user, id, type, authLoading]);
 
   if (authLoading || loading) return <div className="preview-message">Loading content...</div>;
   if (!user) return <Navigate to="/login" replace />;

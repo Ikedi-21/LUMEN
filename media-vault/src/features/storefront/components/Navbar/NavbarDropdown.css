@@ -35,7 +35,7 @@
 }
 
 .navbar-avatar-initials {
-  background: linear-gradient(135deg, var(--accent-primary), #b8473c);
+  background: linear-gradient(135deg, var(--accent-primary), #CC7340);
   color: var(--text-on-primary);
   display: flex;
   align-items: center;
@@ -51,7 +51,7 @@
   right: 0;
   min-width: 220px;
   background: #1e1b18;
-  border: 1px solid rgba(196, 162, 77, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 12px;
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.6),
@@ -96,7 +96,7 @@
   background: linear-gradient(
     to right,
     transparent,
-    rgba(196, 162, 77, 0.2),
+    rgba(212, 175, 55, 0.2),
     transparent
   );
   margin: 0;

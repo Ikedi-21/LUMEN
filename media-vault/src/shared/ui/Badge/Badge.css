@@ -1,0 +1,52 @@
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.badge--sm {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+}
+
+.badge--md {
+  font-size: 0.8rem;
+}
+
+/* ── Variants ─────────────────────────────────────────────── */
+
+.badge--default {
+  background-color: var(--card-surface);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.badge--success {
+  background-color: rgba(var(--success-rgb), 0.15);
+  color: var(--success);
+}
+
+.badge--warning {
+  background-color: rgba(var(--accent-secondary-rgb), 0.15);
+  color: var(--accent-secondary);
+}
+
+.badge--danger {
+  background-color: rgba(var(--danger-rgb), 0.15);
+  color: var(--danger);
+}
+
+.badge--info {
+  background-color: rgba(var(--info-rgb), 0.15);
+  color: var(--info);
+}
+
+.badge--accent {
+  background-color: rgba(var(--accent-primary-rgb), 0.15);
+  color: var(--accent-primary);
+}

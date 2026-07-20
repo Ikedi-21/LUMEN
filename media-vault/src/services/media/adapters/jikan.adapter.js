@@ -16,3 +16,15 @@ export function normalizeManga(item) {
     source: "api",
   };
 }
+
+/**
+ * Normalizes a paginated Jikan response into { items, hasMore }.
+ * Uses pagination.has_next_page from the Jikan API.
+ */
+export function normalizeMangaPage(response) {
+  const data = response.data || [];
+  return {
+    items: data.map(normalizeManga),
+    hasMore: response.pagination?.has_next_page ?? false,
+  };
+}

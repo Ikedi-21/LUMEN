@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link, useSearchParams } from "react-router-dom";
 import { getMediaByType } from "@/services/media";
+import { getStoryGroupForProduct } from "@/services/storyGroups";
 import { useAuth } from "@/features/auth";
 import { addToCart } from "@/services/cart";
 import { getWishlistItems, addToWishlist, removeFromWishlist } from "@/services/wishlist";
-import { hasPurchased, createPurchase } from "@/services/purchases";
+import { hasPurchased, createPurchase, saveProgress } from "@/services/purchases";
 import { spendCoins } from "@/services/coins";
 import { useStorefront } from "../context";
 import { MediaRail, useToast } from "@/shared/ui";
+import AdaptationBridge from "../components/AdaptationBridge/AdaptationBridge";
+import { ArrowLeft } from "lucide-react";
 import "./ProductDetailPage.css";
 
 export default function ProductDetailPage() {
@@ -25,6 +28,36 @@ export default function ProductDetailPage() {
   const [isPurchased, setIsPurchased] = useState(false);
   const [purchaseLoading, setPurchaseLoading] = useState(false);
   const [cartButtonText, setCartButtonText] = useState("Add to cart");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isPreviewOpen, setIsPreviewOpen] = useState(() => searchParams.get("preview") === "true");
+  const [showReader, setShowReader] = useState(false);
+  const [storyGroup, setStoryGroup] = useState(null);
+
+  useEffect(() => {
+    if (searchParams.get("preview") !== "true") return;
+
+    if (user && id) {
+      const pagesRead = Math.floor(Math.random() * 45) + 15;
+      const totalPages = 150;
+      const pct = Math.round((pagesRead / totalPages) * 100);
+      saveProgress(user.id, id, pct, `Page ${pagesRead} of ${totalPages}`);
+    }
+
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete("preview");
+    setSearchParams(newParams, { replace: true });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleOpenPreview() {
+    setIsPreviewOpen(true);
+    if (user && item) {
+      const pagesRead = Math.floor(Math.random() * 45) + 15;
+      const totalPages = 150;
+      const pct = Math.round((pagesRead / totalPages) * 100);
+      saveProgress(user.id, item.id, pct, `Page ${pagesRead} of ${totalPages}`);
+    }
+  }
 
   useEffect(() => {
     async function loadProductData() {
@@ -39,6 +72,10 @@ export default function ProductDetailPage() {
 
         if (product) {
           setRelated(allItems.filter((i) => i.id !== id).slice(0, 10));
+
+          // Fetch adaptation bridge data for this product
+          const group = await getStoryGroupForProduct(id);
+          setStoryGroup(group);
 
           // If user is logged in, check wishlist state and purchase state
           if (user) {
@@ -209,12 +246,15 @@ export default function ProductDetailPage() {
 
           <div className="product-detail-actions">
             {isPurchased ? (
-              <Link 
-                to={item.type === "movie" ? `/watch/${item.id}` : `/preview/${item.type}/${item.id}`} 
-                className="btn-primary"
-              >
-                {item.type === "movie" ? "Watch Trailer" : "View Preview"}
-              </Link>
+              item.type === "movie" ? (
+                <Link to={`/watch/${item.id}`} className="btn-primary">
+                  Watch Trailer
+                </Link>
+              ) : (
+                <button onClick={handleOpenPreview} className="btn-primary">
+                  View Preview
+                </button>
+              )
             ) : !user ? (
               <Link to="/login" className="btn-primary" state={{ message: "Log in to purchase", from: location.pathname }}>
                 Log in to purchase
@@ -257,8 +297,88 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
+      <AdaptationBridge storyGroup={storyGroup} currentProductId={id} />
+
       {related.length > 0 && (
         <MediaRail title={`More ${displayType}s`} items={related} />
+      )}
+
+      {isPreviewOpen && (
+        <div className="preview-modal-overlay">
+          <div className="preview-modal-content">
+            <header className="preview-modal-header">
+              <button onClick={() => setIsPreviewOpen(false)} className="preview-modal-close-btn">
+                <ArrowLeft size={20} />
+                Exit Reader
+              </button>
+            </header>
+            <main className="preview-modal-body">
+              {showReader && item.archiveId ? (
+                <div className="full-reader-container">
+                  <div style={{ marginBottom: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <h2 style={{ fontSize: "1.5rem", color: "#fff", margin: 0 }}>{item.title}</h2>
+                    <button onClick={() => setShowReader(false)} className="btn-back-info">
+                      Back to Details
+                    </button>
+                  </div>
+                  <iframe
+                    src={`https://archive.org/embed/${item.archiveId}`}
+                    width="100%"
+                    height="750px"
+                    style={{ border: "none", borderRadius: "8px", backgroundColor: "#000" }}
+                    webkitallowfullscreen="true"
+                    mozallowfullscreen="true"
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <div className="preview-modal-reader-layout">
+                  <div className="reader-cover-wrapper">
+                     <img src={item.cover} alt={item.title} className="reader-cover" />
+                  </div>
+                  <div className="reader-content">
+                    <h1 className="reader-title">{item.title}</h1>
+                    {item.creator && <p className="reader-creator">By {item.creator}</p>}
+                    
+                    {item.genres && item.genres.length > 0 && (
+                      <div className="reader-genres">
+                        {item.genres.map((g) => (
+                          <span key={g} className="reader-genre-badge">{g}</span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="reader-divider" />
+                    
+                    <div className="reader-text">
+                      {item.description || "No full description available for this title."}
+                    </div>
+
+                    {item.type === "book" && item.isPublicDomain && item.archiveId && (
+                      <div style={{ marginTop: "2.5rem", textAlign: "center" }}>
+                        <button onClick={() => setShowReader(true)} className="btn-read-full">
+                          Read Full Book
+                        </button>
+                      </div>
+                    )}
+
+                    <div className="reader-footer-note">
+                      {item.type === "book" ? (
+                        item.isPublicDomain && item.archiveId ? (
+                          <p>Public Domain Title — Full book access available via Internet Archive.</p>
+                        ) : (
+                          <p>Full text unavailable — this title is not in the public domain.</p>
+                        )
+                      ) : (
+                        <p>Preview copy — full text unavailable due to publisher copyright restrictions.</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </main>
+          </div>
+        </div>
       )}
     </div>
   );

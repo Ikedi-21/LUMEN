@@ -1,0 +1,169 @@
+.staff-app-page {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-7) var(--space-6);
+}
+
+.staff-app-card {
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-card);
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+
+.staff-app-header {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.staff-app-icon {
+  color: var(--accent-secondary);
+  margin-bottom: var(--space-3);
+}
+
+.staff-app-header h1 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-2);
+}
+
+.staff-app-header p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* ── Already staff ───────────────────────────────────────── */
+
+.staff-app-already {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.btn-staff-app-admin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: var(--accent-primary);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: var(--radius-card);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-staff-app-admin:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--accent-primary-rgb), 0.4);
+}
+
+/* ── Status section ──────────────────────────────────────── */
+
+.staff-app-status-section {
+  text-align: left;
+}
+
+.staff-app-status-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.staff-app-status-label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.staff-app-status-date {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-5);
+}
+
+.staff-app-reapply p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0 0 var(--space-4);
+}
+
+/* ── Form ────────────────────────────────────────────────── */
+
+.staff-app-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.staff-app-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  text-align: left;
+}
+
+.staff-app-field label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.staff-app-field textarea,
+.staff-app-form textarea {
+  padding: 12px;
+  background: var(--card-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  min-height: 120px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.staff-app-field textarea:focus,
+.staff-app-form textarea:focus {
+  border-color: var(--accent-secondary);
+}
+
+.btn-staff-app-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--accent-primary);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: var(--radius-card);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-staff-app-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--accent-primary-rgb), 0.4);
+}
+
+.btn-staff-app-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

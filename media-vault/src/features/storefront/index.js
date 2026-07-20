@@ -10,6 +10,5 @@ export { default as CartPage } from "./pages/CartPage";
 export { default as WishlistPage } from "./pages/WishlistPage";
 export { default as LibraryPage } from "./pages/LibraryPage";
 export { default as WatchPage } from "./pages/WatchPage";
-export { default as PreviewPage } from "./pages/PreviewPage";
 export { default as ReceiptPage } from "./pages/ReceiptPage";
 export { default as TopUpPage } from "./pages/TopUpPage";

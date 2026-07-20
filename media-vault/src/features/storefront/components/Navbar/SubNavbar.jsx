@@ -22,12 +22,9 @@ export default function SubNavbar() {
       <div className="sub-navbar-inner">
         <div className="sub-navbar-links">
           {sections.map(({ id, name, icon: Icon, path }) => {
-            let isActive = false;
-            if (isHomepage) {
-              isActive = activeSection === id;
-            } else {
-              isActive = location.pathname === path;
-            }
+            const isActive = isHomepage
+              ? activeSection === id
+              : location.pathname === path;
 
             const toPath = isHomepage ? `/?section=${id}` : path;
 

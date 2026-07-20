@@ -30,8 +30,8 @@ export default function LoginPage() {
       {infoMessage && (
         <div style={{
           color: "var(--accent-secondary)",
-          backgroundColor: "rgba(196, 162, 77, 0.08)",
-          border: "1px solid rgba(196, 162, 77, 0.2)",
+          backgroundColor: "rgba(212, 175, 55, 0.08)",
+          border: "1px solid rgba(212, 175, 55, 0.2)",
           padding: "12px",
           borderRadius: "var(--radius-card)",
           marginBottom: "20px",

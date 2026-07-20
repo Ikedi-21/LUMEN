@@ -137,6 +137,35 @@
   cursor: not-allowed;
 }
 
+/* ── Staff Access section ────────────────────────────────── */
+
+.settings-staff-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--space-4);
+}
+
+.btn-staff-apply {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: var(--accent-primary);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: var(--radius-card);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-staff-apply:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--accent-primary-rgb), 0.4);
+}
+
 @media (max-width: 768px) {
   .settings-page {
     padding: var(--space-5) var(--space-4);

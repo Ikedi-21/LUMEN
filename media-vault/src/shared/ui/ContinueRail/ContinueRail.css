@@ -1,0 +1,13 @@
+.continue-skeleton {
+  width: 180px;
+  height: 300px;
+  flex-shrink: 0;
+  border-radius: var(--radius-card);
+  background: linear-gradient(110deg, var(--card-surface) 30%, var(--surface) 50%, var(--card-surface) 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}

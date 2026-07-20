@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "@/features/auth";
 import { getUserPurchases, removePurchase } from "@/services/purchases";
@@ -13,23 +13,26 @@ export default function LibraryPage() {
   const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      loadLibrary();
-    }
-  }, [user]);
 
-  async function loadLibrary() {
-    setLoading(true);
-    try {
-      const data = await getUserPurchases(user.id);
-      setPurchases(data);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    let active = true;
+    if (user) {
+      getUserPurchases(user.id)
+        .then((data) => {
+          if (active) {
+            setPurchases(data);
+            setLoading(false);
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+          if (active) setLoading(false);
+        });
     }
-  }
+    return () => {
+      active = false;
+    };
+  }, [user]);
 
   async function handleRemove(e, productId, title) {
     e.preventDefault();
@@ -74,7 +77,7 @@ export default function LibraryPage() {
         <div className="library-grid">
           {purchases.map((item) => {
             const isMovie = item.product_type === "movie";
-            const route = isMovie ? `/watch/${item.product_id}` : `/preview/${item.product_type}/${item.product_id}`;
+            const route = isMovie ? `/watch/${item.product_id}` : `/product/${item.product_type}/${item.product_id}?preview=true`;
             return (
               <Link to={route} key={item.id} className="library-card">
                 <div className="card-image-wrapper">
