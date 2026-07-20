@@ -1,0 +1,87 @@
+.cookie-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: var(--space-5) 0;
+}
+
+.cookie-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.cookie-toggle-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.cookie-toggle-label {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.cookie-toggle-desc {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* ---- Toggle Switch ---- */
+.cookie-switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.cookie-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.cookie-switch-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--border);
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.cookie-switch-slider::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 18px;
+  height: 18px;
+  background: var(--text-primary);
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.cookie-switch input:checked + .cookie-switch-slider {
+  background: var(--accent-primary);
+}
+
+.cookie-switch input:checked + .cookie-switch-slider::before {
+  transform: translateX(20px);
+}
+
+.cookie-switch--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cookie-switch--disabled input {
+  cursor: not-allowed;
+}

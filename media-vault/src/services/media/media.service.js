@@ -1,12 +1,12 @@
 import { fetchPopularMovies, searchMovies } from "./clients/tmdb";
 import { fetchBooks } from "./clients/openLibrary";
-import { fetchTopManga, searchManga } from "./clients/jikan";
-import { fetchComics } from "./clients/comicVine";
+import { fetchTopManga, searchManga, fetchMangaById } from "./clients/jikan";
+import { fetchComics, fetchComicById } from "./clients/comicVine";
 
 import { normalizeMovie, normalizeMoviePage } from "./adapters/tmdb.adapter";
 import { normalizeBook, normalizeBookPage } from "./adapters/openLibrary.adapter";
-import { normalizeMangaPage } from "./adapters/jikan.adapter";
-import { normalizeComicPage } from "./adapters/comicVine.adapter";
+import { normalizeManga, normalizeMangaPage } from "./adapters/jikan.adapter";
+import { normalizeComic, normalizeComicPage } from "./adapters/comicVine.adapter";
 
 import { generatePrice } from "@/shared/lib/pricing";
 import { getAdminProducts } from "@/services/products";
@@ -172,6 +172,25 @@ export async function getMediaById(type, id) {
         };
       }
     }
+    if (type === "manga" && id.startsWith("jikan-")) {
+      const malId = id.replace("jikan-", "");
+      const raw = await fetchMangaById(malId);
+      if (raw) {
+        return {
+          ...normalizeManga(raw),
+          price: generatePrice(id, raw.score),
+        };
+      }
+    }
+    if (type === "comic" && id.startsWith("comicvine-")) {
+      const raw = await fetchComicById(id);
+      if (raw) {
+        return {
+          ...normalizeComic(raw),
+          price: generatePrice(id, null),
+        };
+      }
+    }
   } catch (err) {
     console.warn(`Failed to resolve media item ${id} directly:`, err);
   }
@@ -191,12 +210,10 @@ export async function searchMediaPage(query, page = 1) {
   if (!query || !query.trim()) return { items: [], hasMore: false, nextPage: null };
   const q = query.trim();
 
-  const [movies, books, manga, comics] = await Promise.all([
-    SEARCH_FETCHERS.movie(q, page),
-    SEARCH_FETCHERS.book(q, page),
-    SEARCH_FETCHERS.manga(q, page),
-    SEARCH_FETCHERS.comic(q, page),
-  ]);
+  const movies = await SEARCH_FETCHERS.movie(q, page);
+  const books = await SEARCH_FETCHERS.book(q, page);
+  const manga = await SEARCH_FETCHERS.manga(q, page);
+  const comics = await SEARCH_FETCHERS.comic(q, page);
 
   const apiItems = [...movies.items, ...books.items, ...manga.items, ...comics.items];
   const anyHasMore = movies.hasMore || books.hasMore || manga.hasMore || comics.hasMore;

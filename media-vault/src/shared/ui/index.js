@@ -9,3 +9,4 @@ export { default as PageTransitionWrapper } from "./PageTransitionWrapper/PageTr
 export { ToastProvider, useToast } from "./Toast";
 export { default as EmptyState } from "./EmptyState/EmptyState";
 export { default as ContinueRail } from "./ContinueRail/ContinueRail";
+export { default as LegalPageLayout } from "./LegalPageLayout/LegalPageLayout";

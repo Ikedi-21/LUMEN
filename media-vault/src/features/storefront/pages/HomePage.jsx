@@ -19,20 +19,32 @@ export default function HomePage() {
   const [featuredItems, setFeaturedItems] = useState([]);
 
   useEffect(() => {
-    Promise.all(
-      SECTIONS.map((s) =>
-        getMediaByType(s.type)
-          .then((items) => [s.type, items.slice(0, 10)])
-          .catch((err) => {
-            console.error(`Failed to load ${s.type}:`, err);
-            return [s.type, []];
-          })
-      )
-    ).then((results) => {
+    async function loadAll() {
+      const results = [];
+
+      const movieResult = await getMediaByType("movie")
+        .then((items) => ["movie", items.slice(0, 10)])
+        .catch((err) => { console.error("Failed to load movie:", err); return ["movie", []]; });
+      results.push(movieResult);
+
+      const bookResult = await getMediaByType("book")
+        .then((items) => ["book", items.slice(0, 10)])
+        .catch((err) => { console.error("Failed to load book:", err); return ["book", []]; });
+      results.push(bookResult);
+
+      const mangaResult = await getMediaByType("manga")
+        .then((items) => ["manga", items.slice(0, 10)])
+        .catch((err) => { console.error("Failed to load manga:", err); return ["manga", []]; });
+      results.push(mangaResult);
+
+      const comicResult = await getMediaByType("comic")
+        .then((items) => ["comic", items.slice(0, 10)])
+        .catch((err) => { console.error("Failed to load comic:", err); return ["comic", []]; });
+      results.push(comicResult);
+
       const dataMap = Object.fromEntries(results);
       setData(dataMap);
 
-      // Pick 5 featured items — bias toward movies (first 3), then 1 manga, 1 book
       const movies = (dataMap.movie || []).filter((m) => m.cover || m.backdrop);
       const manga = (dataMap.manga || []).filter((m) => m.cover);
       const books = (dataMap.book || []).filter((m) => m.cover);
@@ -43,7 +55,6 @@ export default function HomePage() {
         ...(books.length > 0 ? [books[0]] : []),
       ].slice(0, 5);
 
-      // If we still don't have 5, fill from remaining movies
       if (picks.length < 5) {
         const remaining = movies.slice(3);
         for (const m of remaining) {
@@ -54,7 +65,9 @@ export default function HomePage() {
 
       setFeaturedItems(picks);
       setLoading(false);
-    });
+    }
+
+    loadAll();
   }, []);
 
   // Filter sections to show

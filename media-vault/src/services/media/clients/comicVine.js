@@ -3,6 +3,23 @@
  * Includes a premium mock data fallback if the serverless function is offline
  * (e.g. when developing locally via `npm run dev` instead of `vercel dev` or if keys are missing).
  */
+const cache = new Map();
+const CACHE_TTL = 5 * 60 * 1000;
+
+function getCached(key) {
+  const entry = cache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.timestamp > CACHE_TTL) {
+    cache.delete(key);
+    return null;
+  }
+  return entry.data;
+}
+
+function setCache(key, data) {
+  cache.set(key, { data, timestamp: Date.now() });
+}
+
 const FALLBACK_ITEMS = [
   {
     id: 9912270,
@@ -106,9 +123,29 @@ const FALLBACK_ITEMS = [
   }
 ];
 
+export async function fetchComicById(comicId) {
+  try {
+    const numericId = comicId.replace(/^comicvine-/, "");
+    const res = await fetch(`/api/comicvine?query=${numericId}&offset=0&limit=1`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const match = (data.results || []).find((r) => String(r.id) === String(numericId));
+    return match || (data.results && data.results[0]) || null;
+  } catch (err) {
+    console.warn(`[ComicVine] Direct lookup failed for ${comicId}: ${err.message}`);
+    const numericId = comicId.replace(/^comicvine-/, "");
+    return FALLBACK_ITEMS.find((m) => String(m.id) === String(numericId)) || null;
+  }
+}
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export async function fetchComics(query = "spider-man", offset = 0, limit = 20) {
+  const cacheKey = `comics:${query}:${offset}:${limit}`;
+  const cached = getCached(cacheKey);
+  if (cached) return cached;
+
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       if (attempt > 0) await sleep(1500);
@@ -124,11 +161,13 @@ export async function fetchComics(query = "spider-man", offset = 0, limit = 20) 
         throw new Error(data.error);
       }
       
-      return {
+      const result = {
         results: data.results || [],
         total_results: data.number_of_total_results || data.results?.length || 0,
         offset: data.offset || 0,
       };
+      setCache(cacheKey, result);
+      return result;
     } catch (err) {
       if (attempt === 0) continue;
       console.warn(

@@ -3,7 +3,7 @@ import StorefrontLayout from "./layouts/StorefrontLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import MinimalLayout from "./layouts/MinimalLayout";
 
-import { HomePage, BrowsePage, ProductDetailPage, SearchPage, CartPage, WishlistPage, LibraryPage, WatchPage, ReceiptPage, TopUpPage } from "@/features/storefront";
+import { HomePage, BrowsePage, ProductDetailPage, SearchPage, CartPage, WishlistPage, LibraryPage, WatchPage, ReceiptPage, TopUpPage, AboutPage, CareersPage, ContactPage, FAQPage, PrivacyPolicyPage, TermsOfServicePage, CookiePreferencesPage } from "@/features/storefront";
 import { LoginPage, SignupPage, SettingsPage, StaffApplicationPage } from "@/features/auth";
 import { AdminDashboardPage, ProductTable, ProductForm, EarningsPage } from "@/features/admin";
 import { StaffPage, PayoutReviewPage } from "@/features/manager";
@@ -25,6 +25,13 @@ export default function AppRoutes() {
         <Route path="top-up" element={<TopUpPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="apply-staff" element={<StaffApplicationPage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="careers" element={<CareersPage />} />
+        <Route path="contact" element={<ContactPage />} />
+        <Route path="faq" element={<FAQPage />} />
+        <Route path="privacy" element={<PrivacyPolicyPage />} />
+        <Route path="terms" element={<TermsOfServicePage />} />
+        <Route path="cookie-preferences" element={<CookiePreferencesPage />} />
       </Route>
 
       {/* Auth / Minimal Layout Routes */}
