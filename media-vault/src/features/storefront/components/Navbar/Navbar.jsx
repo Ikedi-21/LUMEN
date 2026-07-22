@@ -74,7 +74,7 @@ export default function Navbar() {
         </div>
 
         <div className="navbar-actions">
-          <Link to="/search" className="navbar-icon badge-container" title="Search">
+          <Link to="/search" className="navbar-icon badge-container navbar-search-btn" title="Search">
             <Search size={20} />
           </Link>
           {user ? (
@@ -90,7 +90,7 @@ export default function Navbar() {
                 <span className="coin-currency-hint">{formatCoinsAsCurrency(coins)}</span>
               </button>
 
-              <Link to="/wishlist" className="navbar-icon badge-container" title="Wishlist">
+              <Link to="/wishlist" className="navbar-icon badge-container navbar-wishlist-btn" title="Wishlist">
                 <Heart size={20} />
                 {wishlistCount > 0 && <span className="badge">{wishlistCount}</span>}
               </Link>

@@ -169,6 +169,11 @@
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: var(--space-4) var(--space-3);
   }
+
+  .library-remove-btn {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 

@@ -63,11 +63,42 @@
 
 @media (max-width: 600px) {
   .cart-item {
+    display: grid;
     grid-template-columns: 80px 1fr;
-    gap: var(--space-3);
+    grid-template-rows: auto auto auto;
+    gap: var(--space-2) var(--space-4);
+    position: relative;
+    padding: var(--space-4);
   }
+  
+  .cart-item-image {
+    grid-row: span 3;
+  }
+
+  .cart-item-details {
+    grid-column: 2;
+    padding-right: 32px; /* make space for absolute delete button */
+  }
+
+  .cart-item-price {
+    grid-column: 2;
+    font-size: 1rem;
+  }
+
   .cart-item-controls-col {
     grid-column: 2;
+    margin-top: var(--space-1);
+  }
+
+  .btn-remove-item {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    width: 44px !important;
+    height: 44px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
   }
 }
 

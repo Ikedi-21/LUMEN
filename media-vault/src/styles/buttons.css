@@ -128,3 +128,17 @@ body .btn-qty:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* Mobile Touch Targets */
+@media (max-width: 768px) {
+  body .btn-remove-item,
+  body .btn-remove-wishlist,
+  body .btn-action-small {
+    width: 44px;
+    height: 44px;
+  }
+  body .btn-qty {
+    width: 44px;
+    height: 44px;
+  }
+}

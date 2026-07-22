@@ -98,3 +98,24 @@
   border-top: 1px dashed var(--border);
   margin-top: var(--space-6);
 }
+
+@media (max-width: 768px) {
+  .search-page {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .search-title {
+    font-size: 2rem;
+    margin-bottom: var(--space-4);
+  }
+
+  .search-form-wrapper {
+    margin-bottom: var(--space-5);
+    max-width: 100%;
+  }
+
+  .search-results-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-4) var(--space-3);
+  }
+}

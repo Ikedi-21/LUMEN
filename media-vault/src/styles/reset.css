@@ -118,3 +118,35 @@ a {
   }
 }
 
+/* Minimal Layout for Auth Containers */
+.minimal-layout-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--bg);
+  padding: var(--space-4);
+}
+
+.minimal-layout-container {
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 40px;
+}
+
+@media (max-width: 480px) {
+  .minimal-layout-wrapper {
+    padding: 0;
+  }
+  .minimal-layout-container {
+    padding: 32px var(--space-4);
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+

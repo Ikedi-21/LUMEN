@@ -69,3 +69,10 @@
 .btn-confirm-action:hover {
   opacity: 0.9;
 }
+
+@media (max-width: 480px) {
+  .confirm-dialog-container {
+    width: 92%;
+    padding: var(--space-4);
+  }
+}

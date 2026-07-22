@@ -184,6 +184,14 @@
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: var(--space-4) var(--space-3);
   }
+
+  .filter-chip {
+    padding: 10px 20px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 

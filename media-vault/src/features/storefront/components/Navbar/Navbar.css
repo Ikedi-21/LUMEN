@@ -256,4 +256,19 @@
     padding: 6px var(--space-2);
     font-size: 0.85rem;
   }
+  .coin-balance {
+    display: none !important;
+  }
+  .navbar-wishlist-btn {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-search-btn {
+    display: none !important;
+  }
+  .navbar-actions {
+    gap: var(--space-1);
+  }
 }

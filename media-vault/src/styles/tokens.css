@@ -48,5 +48,14 @@
   --btn-padding-x: 20px;
   --btn-font-weight: 500;
   --btn-transition: all 0.2s ease;
-}
 
+  /* Helper & Fallback aliases for unified skinning */
+  --bg-secondary: var(--surface);
+  --bg-tertiary: var(--card-surface);
+  --border-color: var(--border);
+  --border-light: var(--border);
+  --bg-main: var(--bg);
+  --radius-lg: var(--radius-card);
+  --radius-md: var(--radius-card);
+  --radius-sm: 4px;
+}

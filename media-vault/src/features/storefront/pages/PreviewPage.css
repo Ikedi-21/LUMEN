@@ -162,3 +162,31 @@
   padding: 2rem 0;
 }
 
+@media (max-width: 768px) {
+  .preview-header {
+    padding: 1rem;
+  }
+
+  .reader-container {
+    padding: 2rem 1rem;
+  }
+
+  .reader-cover-wrapper {
+    max-width: 260px;
+    margin-bottom: 2rem;
+  }
+
+  .reader-content {
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+
+  .reader-title {
+    font-size: 1.8rem;
+  }
+
+  .reader-text {
+    font-size: 1rem;
+  }
+}
+

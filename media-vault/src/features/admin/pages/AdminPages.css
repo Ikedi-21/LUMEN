@@ -315,5 +315,9 @@
   .admin-form-actions button {
     width: 100%;
   }
+
+  .admin-form-container {
+    padding: var(--space-4);
+  }
 }
 
