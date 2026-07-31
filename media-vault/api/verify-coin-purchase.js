@@ -1,20 +1,14 @@
 import { createClient } from "@supabase/supabase-js";
 
+const supabaseAdmin = createClient(
+  process.env.VITE_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
-
-  const authHeader = req.headers.authorization;
-  const supabase = createClient(
-    process.env.VITE_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY,
-    (!process.env.SUPABASE_SERVICE_ROLE_KEY && authHeader) ? {
-      global: {
-        headers: { Authorization: authHeader }
-      }
-    } : undefined
-  );
 
   const { reference, purchaseId } = req.body;
   if (!reference || !purchaseId) {
@@ -40,14 +34,14 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, error: 'Payment not successful' });
     }
 
-    const { data: purchase, error: fetchError } = await supabase
+    const { data: purchase, error: fetchError } = await supabaseAdmin
       .from('coin_purchases')
       .select('*')
       .eq('id', purchaseId)
       .single();
 
     if (fetchError || !purchase) {
-      return res.status(404).json({ success: false, error: 'Purchase record not found. Verify your RLS policies or use a Service Role key.' });
+      return res.status(404).json({ success: false, error: 'Purchase record not found' });
     }
 
     if (purchase.status === 'paid') {
@@ -59,12 +53,12 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, error: 'Amount paid is less than expected' });
     }
 
-    await supabase
+    await supabaseAdmin
       .from('coin_purchases')
       .update({ status: 'paid', paystack_reference: reference })
       .eq('id', purchaseId);
 
-    const { data: profile } = await supabase
+    const { data: profile } = await supabaseAdmin
       .from('profiles')
       .select('coins')
       .eq('id', purchase.user_id)
@@ -73,7 +67,7 @@ export default async function handler(req, res) {
     const currentCoins = Number(profile?.coins || 0);
     const newBalance = currentCoins + Number(purchase.coins_requested);
 
-    await supabase
+    await supabaseAdmin
       .from('profiles')
       .update({ coins: newBalance })
       .eq('id', purchase.user_id);
