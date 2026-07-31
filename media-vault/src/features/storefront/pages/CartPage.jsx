@@ -9,7 +9,7 @@ import { useStorefront } from "../context";
 import { useToast } from "@/shared/ui";
 import { EmptyState } from "@/shared/ui";
 import { ShoppingCart } from "lucide-react";
-import { formatCoinsAsCurrency } from "@/shared/lib/pricing";
+import { formatCoinsAsCurrency, convertToCoins } from "@/shared/lib/pricing";
 import "./CartPage.css";
 
 export default function CartPage() {
@@ -106,7 +106,9 @@ export default function CartPage() {
   async function handleCheckout() {
     if (!user) return;
     
-    if (coins < cartItems.length) {
+    const totalCost = cartItems.reduce((acc, item) => acc + (item.product.price ? convertToCoins(item.product.price) : 1), 0);
+
+    if (coins < totalCost) {
       addToast("You don't have enough coins.", "error");
       return;
     }
@@ -130,10 +132,12 @@ export default function CartPage() {
       }
 
       if (itemsToBuy.length > 0) {
-        await spendCoins(user.id, itemsToBuy.length);
+        const totalCostToBuy = itemsToBuy.reduce((acc, item) => acc + (item.product.price ? convertToCoins(item.product.price) : 1), 0);
+        await spendCoins(user.id, totalCostToBuy);
 
         for (const item of itemsToBuy) {
-          await createPurchase(user.id, item.product, 1);
+          const coinPrice = item.product.price ? convertToCoins(item.product.price) : 1;
+          await createPurchase(user.id, item.product, coinPrice);
           await removeFromCart(user.id, item.product_id);
         }
         await refreshCoins();
@@ -158,7 +162,7 @@ export default function CartPage() {
     }
   }
 
-  const totalCost = cartItems.length;
+  const totalCost = cartItems.reduce((acc, item) => acc + (item.product.price ? convertToCoins(item.product.price) : 1), 0);
   const shortfall = Math.max(0, totalCost - coins);
   const canAfford = coins >= totalCost;
 
@@ -180,6 +184,7 @@ export default function CartPage() {
           <div className="cart-list">
             {cartItems.map((item) => {
               const displayType = item.product.type ? item.product.type.charAt(0).toUpperCase() + item.product.type.slice(1) : "";
+              const coinPrice = item.product.price ? convertToCoins(item.product.price) : 1;
 
               return (
                 <div key={item.product_id} className="cart-item">
@@ -196,7 +201,7 @@ export default function CartPage() {
                     <h3>{item.product.title}</h3>
                     <span className="cart-item-type">{displayType}</span>
                   </div>
-                  <div className="cart-item-price">1 coin</div>
+                  <div className="cart-item-price">{coinPrice} coin{coinPrice !== 1 ? "s" : ""}</div>
                   <div className="cart-item-quantity cart-item-controls-col">
                      <span className="cart-qty-value">x1</span>
                   </div>
@@ -215,12 +220,15 @@ export default function CartPage() {
             <h2 className="order-summary-title">Order Summary</h2>
 
             <div className="order-summary-items">
-              {cartItems.map((item) => (
-                <div key={item.product_id} className="order-summary-item">
-                  <span className="order-summary-item-title">{item.product.title}</span>
-                  <span className="order-summary-item-cost">1 coin</span>
-                </div>
-              ))}
+              {cartItems.map((item) => {
+                const coinPrice = item.product.price ? convertToCoins(item.product.price) : 1;
+                return (
+                  <div key={item.product_id} className="order-summary-item">
+                    <span className="order-summary-item-title">{item.product.title}</span>
+                    <span className="order-summary-item-cost">{coinPrice} coin{coinPrice !== 1 ? "s" : ""}</span>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="order-summary-divider" />

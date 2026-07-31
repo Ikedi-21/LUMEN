@@ -158,11 +158,11 @@ export default function ProductForm() {
           </div>
 
           <div className="admin-form-field">
-            <label htmlFor="price">Price (in Kobo / lowest currency unit) *</label>
+            <label htmlFor="price">Price (Coins) *</label>
             <input
               id="price"
               type="number"
-              placeholder="e.g. 1500000 (for ₦15,000.00)"
+              placeholder="e.g. 100"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               disabled={loading}

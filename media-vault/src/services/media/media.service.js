@@ -1,12 +1,12 @@
 import { fetchPopularMovies, searchMovies } from "./clients/tmdb";
 import { fetchBooks } from "./clients/openLibrary";
-import { fetchTopManga, searchManga, fetchMangaById } from "./clients/jikan";
-import { fetchComics, fetchComicById } from "./clients/comicVine";
+import { fetchTopManga, searchManga, fetchMangaById } from "./clients/anilist";
+import { fetchComics, searchComics } from "./clients/openLibraryComics";
 
 import { normalizeMovie, normalizeMoviePage } from "./adapters/tmdb.adapter";
 import { normalizeBook, normalizeBookPage } from "./adapters/openLibrary.adapter";
-import { normalizeManga, normalizeMangaPage } from "./adapters/jikan.adapter";
-import { normalizeComic, normalizeComicPage } from "./adapters/comicVine.adapter";
+import { normalizeManga, normalizeMangaPage } from "./adapters/anilist.adapter";
+import { normalizeComic, normalizeComicPage } from "./adapters/openLibraryComics.adapter";
 
 import { generatePrice } from "@/shared/lib/pricing";
 import { getAdminProducts } from "@/services/products";
@@ -53,14 +53,13 @@ const PAGE_FETCHERS = {
     const { items, hasMore } = normalizeBookPage(raw);
     return { items: items.map(withPrice), hasMore };
   }),
-  manga: (page) => safeFetch("Jikan", async () => {
+  manga: (page) => safeFetch("AniList", async () => {
     const raw = await fetchTopManga(page);
     const { items, hasMore } = normalizeMangaPage(raw);
     return { items: items.map(withPrice), hasMore };
   }),
-  comic: (page) => safeFetch("ComicVine", async () => {
-    const offset = (page - 1) * 20;
-    const raw = await fetchComics("spider-man", offset, 20);
+  comic: (page) => safeFetch("OpenLibraryComics", async () => {
+    const raw = await fetchComics(page);
     const { items, hasMore } = normalizeComicPage(raw);
     return { items: items.map(withPrice), hasMore };
   }),
@@ -81,14 +80,13 @@ const SEARCH_FETCHERS = {
     const { items, hasMore } = normalizeBookPage(raw);
     return { items: items.map(withPrice), hasMore };
   }),
-  manga: (q, page) => safeFetch("Jikan_Search", async () => {
+  manga: (q, page) => safeFetch("AniList_Search", async () => {
     const raw = await searchManga(q, page);
     const { items, hasMore } = normalizeMangaPage(raw);
     return { items: items.map(withPrice), hasMore };
   }),
-  comic: (q, page) => safeFetch("ComicVine_Search", async () => {
-    const offset = (page - 1) * 20;
-    const raw = await fetchComics(q, offset, 20);
+  comic: (q, page) => safeFetch("OpenLibraryComics_Search", async () => {
+    const raw = await searchComics(q, page);
     const { items, hasMore } = normalizeComicPage(raw);
     return { items: items.map(withPrice), hasMore };
   }),
@@ -172,23 +170,28 @@ export async function getMediaById(type, id) {
         };
       }
     }
-    if (type === "manga" && id.startsWith("jikan-")) {
-      const malId = id.replace("jikan-", "");
-      const raw = await fetchMangaById(malId);
+    if (type === "manga" && id.startsWith("anilist-")) {
+      const anilistId = id.replace("anilist-", "");
+      const raw = await fetchMangaById(anilistId);
       if (raw) {
         return {
           ...normalizeManga(raw),
-          price: generatePrice(id, raw.score),
+          price: generatePrice(id, raw.averageScore ? raw.averageScore / 10 : null),
         };
       }
     }
-    if (type === "comic" && id.startsWith("comicvine-")) {
-      const raw = await fetchComicById(id);
-      if (raw) {
-        return {
-          ...normalizeComic(raw),
-          price: generatePrice(id, null),
-        };
+    if (type === "comic" && id.startsWith("olcomic-")) {
+      const workId = id.replace("olcomic-", "");
+      const res = await fetch(`https://openlibrary.org/search.json?q=${workId}&limit=1`);
+      if (res.ok) {
+        const data = await res.json();
+        const doc = data.docs?.[0];
+        if (doc) {
+          return {
+            ...normalizeComic(doc),
+            price: generatePrice(id, doc.ratings_average),
+          };
+        }
       }
     }
   } catch (err) {

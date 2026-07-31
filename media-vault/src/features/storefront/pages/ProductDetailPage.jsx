@@ -11,6 +11,7 @@ import { useStorefront } from "../context";
 import { MediaRail, useToast } from "@/shared/ui";
 import AdaptationBridge from "../components/AdaptationBridge/AdaptationBridge";
 import { ArrowLeft } from "lucide-react";
+import { convertToCoins } from "@/shared/lib/pricing";
 import "./ProductDetailPage.css";
 
 export default function ProductDetailPage() {
@@ -154,9 +155,9 @@ export default function ProductDetailPage() {
 
   async function handlePurchase() {
     if (!user) return;
+    const coinPrice = item.price ? convertToCoins(item.price) : 1;
     setPurchaseLoading(true);
     try {
-      const coinPrice = 1;
       await spendCoins(user.id, coinPrice);
       await createPurchase(user.id, item, coinPrice);
       await refreshCoins();
@@ -200,8 +201,8 @@ export default function ProductDetailPage() {
     );
   }
 
-  const formattedPrice = item.price ? `₦${(item.price / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "Free";
   const displayType = item.type ? item.type.charAt(0).toUpperCase() + item.type.slice(1) : "";
+  const itemCoinPrice = item.price ? convertToCoins(item.price) : 1;
 
   return (
     <div className="product-detail-page">
@@ -242,7 +243,7 @@ export default function ProductDetailPage() {
             </>
           )}
 
-          <div className="product-detail-price">{formattedPrice}</div>
+          <div className="product-detail-price">{itemCoinPrice} coin{itemCoinPrice !== 1 ? "s" : ""}</div>
 
           <div className="product-detail-actions">
             {isPurchased ? (
@@ -264,11 +265,11 @@ export default function ProductDetailPage() {
                 <button 
                   className="btn-primary" 
                   onClick={handlePurchase} 
-                  disabled={purchaseLoading || coins < 1}
+                  disabled={purchaseLoading || coins < itemCoinPrice}
                 >
-                  {purchaseLoading ? "Processing..." : `Unlock for 1 coin`}
+                  {purchaseLoading ? "Processing..." : `Unlock for ${itemCoinPrice} coin${itemCoinPrice !== 1 ? "s" : ""}`}
                 </button>
-                {coins < 1 && (
+                {coins < itemCoinPrice && (
                   <p style={{ fontSize: "0.85rem", color: "var(--danger)" }}>
                     Not enough coins. <Link to="/top-up" style={{ color: "var(--accent-primary)", textDecoration: "underline" }}>Get more coins</Link>
                   </p>

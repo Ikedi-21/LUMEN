@@ -6,6 +6,7 @@ import MinimalLayout from "./layouts/MinimalLayout";
 import { HomePage, BrowsePage, ProductDetailPage, SearchPage, CartPage, WishlistPage, LibraryPage, WatchPage, ReceiptPage, TopUpPage, AboutPage, CareersPage, ContactPage, FAQPage, PrivacyPolicyPage, TermsOfServicePage, CookiePreferencesPage } from "@/features/storefront";
 import { LoginPage, SignupPage, SettingsPage, StaffApplicationPage } from "@/features/auth";
 import { AdminDashboardPage, ProductTable, ProductForm, EarningsPage } from "@/features/admin";
+import SalesPage from "@/features/admin/pages/SalesPage";
 import { StaffPage, PayoutReviewPage } from "@/features/manager";
 
 export default function AppRoutes() {
@@ -46,6 +47,7 @@ export default function AppRoutes() {
         <Route path="products" element={<ProductTable />} />
         <Route path="products/new" element={<ProductForm />} />
         <Route path="products/:id/edit" element={<ProductForm />} />
+        <Route path="sales" element={<SalesPage />} />
         <Route path="staff" element={<StaffPage />} />
         <Route path="earnings" element={<EarningsPage />} />
         <Route path="payouts" element={<PayoutReviewPage />} />

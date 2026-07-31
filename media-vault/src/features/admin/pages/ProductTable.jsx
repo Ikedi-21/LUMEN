@@ -105,7 +105,6 @@ export default function ProductTable() {
             </thead>
             <tbody>
               {products.map((p) => {
-                const formattedPrice = p.price ? `₦${(p.price / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "Free";
                 const displayType = p.type ? p.type.charAt(0).toUpperCase() + p.type.slice(1) : "";
 
                 return (
@@ -125,7 +124,7 @@ export default function ProductTable() {
                     <td>
                       <Badge variant="default">{displayType}</Badge>
                     </td>
-                    <td><strong>{formattedPrice}</strong></td>
+                    <td><strong>{p.price ? `${p.price} coin${p.price !== 1 ? 's' : ''}` : "Free"}</strong></td>
                     <td>
                       <div className="admin-table-actions">
                         <button className="btn-admin-action btn-admin-secondary" onClick={() => navigate(`/admin/products/${p.id}/edit`)}>

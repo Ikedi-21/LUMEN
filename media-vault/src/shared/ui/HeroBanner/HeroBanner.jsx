@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Play, Info, ChevronLeft, ChevronRight } from "lucide-react";
+import { fetchMovieTrailer } from "@/services/media/clients/tmdb";
 import "./HeroBanner.css";
 
 const MAX_SLIDES = 3;
@@ -14,6 +15,8 @@ export default function HeroBanner({ items = [], item }) {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   });
+  const [isHovered, setIsHovered] = useState(false);
+  const [trailers, setTrailers] = useState({});
   const navigate = useNavigate();
 
   // Detect prefers-reduced-motion
@@ -23,6 +26,29 @@ export default function HeroBanner({ items = [], item }) {
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
   }, []);
+
+  useEffect(() => {
+    if (slides.length <= 1 || isHovered) return;
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % slides.length);
+    }, 8000);
+    return () => clearInterval(timer);
+  }, [slides.length, isHovered]);
+
+  useEffect(() => {
+    const slide = slides[activeIndex];
+    if (!slide || slide.type !== "movie" || prefersReducedMotion) return;
+
+    if (trailers[slide.id] === undefined) {
+      setTrailers(prev => ({ ...prev, [slide.id]: null })); // mark as fetching
+      const tmdbId = slide.id.replace("tmdb-", "");
+      fetchMovieTrailer(tmdbId).then(video => {
+        if (video?.key) {
+          setTrailers(prev => ({ ...prev, [slide.id]: video.key }));
+        }
+      }).catch(console.error);
+    }
+  }, [activeIndex, slides, prefersReducedMotion, trailers]);
 
   function goToSlide(index) {
     setActiveIndex(index);
@@ -43,7 +69,11 @@ export default function HeroBanner({ items = [], item }) {
     : "hero-carousel-slide";
 
   return (
-    <section className="netflix-hero">
+    <section 
+      className="netflix-hero"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Slide layers — all stacked, only active one gets opacity 1 */}
       {slides.map((slide, i) => {
         const bgImage =
@@ -51,13 +81,27 @@ export default function HeroBanner({ items = [], item }) {
           slide.cover ||
           "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=2070&auto=format&fit=crop";
 
+        const hasVideo = trailers[slide.id] && !prefersReducedMotion && i === activeIndex;
+
         return (
           <div
             key={slide.id || i}
             className={`${fadeStyle} ${i === activeIndex ? "active" : ""}`}
             style={{ backgroundImage: `url(${bgImage})` }}
             aria-hidden={i !== activeIndex}
-          />
+          >
+            {hasVideo && (
+              <div className="hero-video-wrapper">
+                <iframe 
+                  src={`https://www.youtube-nocookie.com/embed/${trailers[slide.id]}?autoplay=1&mute=1&loop=1&playlist=${trailers[slide.id]}&controls=0&modestbranding=1&enablejsapi=1`}
+                  className="hero-video-bg"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                  title="Trailer"
+                />
+              </div>
+            )}
+          </div>
         );
       })}
 

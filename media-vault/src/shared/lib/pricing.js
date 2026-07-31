@@ -18,6 +18,10 @@ export function generatePrice(id, rating = 0) {
   return basePrice + ratingBonus;
 }
 
+export function convertToCoins(nairaPrice) {
+  return Math.max(1, Math.round(nairaPrice / 5));
+}
+
 /**
  * Coins-to-currency conversion rate.
  * 1 coin = $0.01 USD. Defined once, reused everywhere.

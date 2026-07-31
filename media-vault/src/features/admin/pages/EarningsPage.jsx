@@ -123,6 +123,11 @@ export default function EarningsPage() {
                     placeholder="Enter amount"
                     required
                   />
+                  {requestedCoins && !isNaN(requestedCoins) && (
+                    <div style={{ marginTop: "4px", fontSize: "0.9rem", color: "var(--accent-secondary)" }}>
+                      = ₦{(parseInt(requestedCoins, 10) * 5).toLocaleString()}
+                    </div>
+                  )}
                 </div>
                 <button
                   type="submit"
