@@ -4,6 +4,7 @@ import { useStorefront } from "../context";
 import { useToast } from "@/shared/ui";
 import { createPendingCoinPurchase } from "@/services/coinPurchases/coinPurchases.service";
 import { usePaystackPayment } from "react-paystack";
+import { supabase } from "@/services/supabase/client";
 import "./TopUpPage.css";
 
 const PACKAGES = [
@@ -37,9 +38,14 @@ function PackageCard({ pkg, user, refreshCoins, addToast }) {
       const onSuccess = async (reference) => {
         try {
           addToast("Payment successful! Verifying...", "info");
+          const { data: { session } } = await supabase.auth.getSession();
+          
           const res = await fetch("/api/verify-coin-purchase", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+              "Content-Type": "application/json",
+              ...(session?.access_token && { "Authorization": `Bearer ${session.access_token}` })
+            },
             body: JSON.stringify({ reference: reference.reference, purchaseId }),
           });
 

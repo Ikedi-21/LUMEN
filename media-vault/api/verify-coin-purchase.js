@@ -1,14 +1,20 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
-);
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  const authHeader = req.headers.authorization;
+  const supabase = createClient(
+    process.env.VITE_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY,
+    (!process.env.SUPABASE_SERVICE_ROLE_KEY && authHeader) ? {
+      global: {
+        headers: { Authorization: authHeader }
+      }
+    } : undefined
+  );
 
   const { reference, purchaseId } = req.body;
   if (!reference || !purchaseId) {
@@ -41,7 +47,7 @@ export default async function handler(req, res) {
       .single();
 
     if (fetchError || !purchase) {
-      return res.status(404).json({ success: false, error: 'Purchase record not found' });
+      return res.status(404).json({ success: false, error: 'Purchase record not found. Verify your RLS policies or use a Service Role key.' });
     }
 
     if (purchase.status === 'paid') {
