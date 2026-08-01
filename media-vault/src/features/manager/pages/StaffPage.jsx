@@ -193,6 +193,8 @@ export default function StaffPage() {
                   <tbody>
                     {profiles.map(p => {
                       const isSelf = p.id === currentProfile?.id;
+                      const role = p.role || "customer";
+                      const status = p.status || "active";
                       return (
                         <tr key={p.id}>
                           <td>
@@ -200,10 +202,10 @@ export default function StaffPage() {
                             {isSelf && <span className="self-badge"> (You)</span>}
                           </td>
                           <td>
-                            <Badge variant={ROLE_VARIANTS[p.role] || "default"}>{p.role}</Badge>
+                            <Badge variant={ROLE_VARIANTS[role] || "default"}>{role}</Badge>
                           </td>
                           <td>
-                            <Badge variant={STATUS_VARIANTS[p.status] || "default"}>{p.status}</Badge>
+                            <Badge variant={STATUS_VARIANTS[status] || "default"}>{status}</Badge>
                           </td>
                           <td>{new Date(p.created_at).toLocaleDateString()}</td>
                           <td>
@@ -212,13 +214,13 @@ export default function StaffPage() {
                             ) : (
                               <div className="actions-cell">
                                 <div className="actions-group">
-                                  {p.role === "customer" && (
+                                  {role === "customer" && (
                                     <button className="btn-action btn-role-up" onClick={() => handleSetRole(p.id, "staff")} title="Promote to Staff">
                                       <ArrowUpCircle size={14} />
                                       <span>Staff</span>
                                     </button>
                                   )}
-                                  {p.role === "staff" && (
+                                  {role === "staff" && (
                                     <>
                                       <button className="btn-action btn-role-up" onClick={() => handleSetRole(p.id, "manager")} title="Promote to Manager">
                                         <ArrowUpCircle size={14} />
@@ -230,7 +232,7 @@ export default function StaffPage() {
                                       </button>
                                     </>
                                   )}
-                                  {p.role === "manager" && (
+                                  {role === "manager" && (
                                     <button className="btn-action btn-role-down" onClick={() => handleSetRole(p.id, "staff")} title="Demote to Staff">
                                       <ArrowDownCircle size={14} />
                                       <span>Staff</span>
@@ -238,27 +240,27 @@ export default function StaffPage() {
                                   )}
                                 </div>
 
-                                {p.role !== "customer" && <div className="actions-separator" />}
+                                {role !== "customer" && <div className="actions-separator" />}
 
                                 <div className="actions-group">
-                                  {p.status === "active" ? (
-                                    <button className="btn-action btn-suspend" onClick={() => handleToggleStatus(p.id, p.status)} title="Suspend user">
+                                  {status === "active" ? (
+                                    <button className="btn-action btn-suspend" onClick={() => handleToggleStatus(p.id, status)} title="Suspend user">
                                       <ShieldOff size={14} />
                                       <span>Suspend</span>
                                     </button>
-                                  ) : p.status === "suspended" ? (
-                                    <button className="btn-action btn-reactivate" onClick={() => handleToggleStatus(p.id, p.status)} title="Reactivate user">
+                                  ) : status === "suspended" ? (
+                                    <button className="btn-action btn-reactivate" onClick={() => handleToggleStatus(p.id, status)} title="Reactivate user">
                                       <ShieldCheck size={14} />
                                       <span>Reactivate</span>
                                     </button>
                                   ) : (
-                                    <button className="btn-action btn-reactivate" onClick={() => handleToggleStatus(p.id, p.status)} title="Restore user">
+                                    <button className="btn-action btn-reactivate" onClick={() => handleToggleStatus(p.id, status)} title="Restore user">
                                       <RotateCcw size={14} />
                                       <span>Restore</span>
                                     </button>
                                   )}
 
-                                  {p.status !== "banned" && (
+                                  {status !== "banned" && (
                                     <button className="btn-action btn-ban" onClick={() => handleBan(p.id)} title="Ban user">
                                       <Ban size={14} />
                                       <span>Ban</span>
