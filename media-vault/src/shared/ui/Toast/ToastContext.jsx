@@ -2,12 +2,14 @@
 import { createContext, useContext, useState, useCallback } from "react";
 import ToastContainer from "./ToastContainer";
 
+// global context that lets any component trigger a toast notification
 const ToastContext = createContext(null);
 
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
 
   const addToast = useCallback((message, type = "info") => {
+    // combine timestamp + random string to avoid collisions if two toasts fire at once
     const id = Date.now() + Math.random().toString(36).substring(2, 9);
     setToasts((prev) => [...prev, { id, message, type }]);
 
@@ -17,9 +19,11 @@ export function ToastProvider({ children }) {
     }, 3000);
   }, []);
 
+  // lets the user manually dismiss a toast before the timer fires
   const removeToast = useCallback((id) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
+
 
   return (
     <ToastContext.Provider value={{ addToast, removeToast }}>

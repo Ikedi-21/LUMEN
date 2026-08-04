@@ -13,6 +13,7 @@ export function StorefrontProvider({ children }) {
   const [wishlistCount, setWishlistCount] = useState(0);
   const [coins, setCoins] = useState(0);
 
+  // sum quantities rather than just counting rows (one row can be qty > 1)
   const refreshCart = useCallback(async () => {
     if (!user) return setCartCount(0);
     try {
@@ -44,6 +45,8 @@ export function StorefrontProvider({ children }) {
     }
   }, [user]);
 
+  // setTimeout(0) defers the fetches until after the auth state settles,
+  // avoiding a race where user is set but the session cookie isn't ready yet
   useEffect(() => {
     let active = true;
     if (user) {

@@ -1,5 +1,6 @@
-﻿import { supabase } from "@/services/supabase/client";
+import { supabase } from "@/services/supabase/client";
 
+// includes profile info so we can show username/avatar without a second query
 export async function getReviews(productId) {
   const { data, error } = await supabase
     .from("reviews")
@@ -27,6 +28,7 @@ export async function getUserReview(userId, productId) {
   return data;
 }
 
+// upserts so editing an existing review doesn't create a duplicate row
 export async function upsertReview(userId, productType, productId, rating, comment) {
   const { data, error } = await supabase
     .from("reviews")
@@ -39,7 +41,7 @@ export async function upsertReview(userId, productType, productId, rating, comme
         comment,
         updated_at: new Date().toISOString(),
       },
-      { onConflict: "user_id,product_id" }
+      { onConflict: "user_id,product_id" } // conflict on this pair = update, not insert
     )
     .select()
     .single();
@@ -56,6 +58,7 @@ export async function deleteReview(userId, productId) {
   if (error) throw error;
 }
 
+// returns null (not 0) when there are no reviews so the UI can hide the rating section
 export function getAverageRating(reviews) {
   if (!reviews || reviews.length === 0) return null;
   const sum = reviews.reduce((acc, r) => acc + r.rating, 0);

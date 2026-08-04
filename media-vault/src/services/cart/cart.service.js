@@ -6,6 +6,7 @@ export async function getCartItems(userId) {
   return data;
 }
 
+// rather than insert blindly, check first so we can increment quantity on duplicates
 export async function addToCart(userId, productId, productType) {
   // Check if the item is already in the cart
   const { data: existing, error: selectError } = await supabase
@@ -35,6 +36,7 @@ export async function addToCart(userId, productId, productType) {
 }
 
 export async function updateCartQuantity(userId, productId, quantity) {
+  // treat quantity 0 (or lower) as a remove instead of leaving a dead row
   if (quantity <= 0) {
     return removeFromCart(userId, productId);
   }

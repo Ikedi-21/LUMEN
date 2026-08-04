@@ -1,3 +1,4 @@
+// Manager-only page for reviewing staff applications and managing user roles/status
 import { useState, useEffect } from "react";
 import RoleGuard from "@/shared/guards/RoleGuard";
 import { useAuth } from "@/features/auth";
@@ -8,6 +9,7 @@ import { ArrowUpCircle, ArrowDownCircle, ShieldOff, ShieldCheck, Ban, RotateCcw,
 import "../../admin/pages/AdminPages.css";
 import "./StaffPage.css";
 
+// maps role/status values to badge colour variants
 const ROLE_VARIANTS = { manager: "accent", staff: "info", customer: "default" };
 const STATUS_VARIANTS = { active: "success", suspended: "warning", banned: "danger" };
 
@@ -22,6 +24,7 @@ export default function StaffPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmConfig, setConfirmConfig] = useState({ title: "", message: "", label: "", onConfirm: null });
 
+  // load profiles and applications in parallel on mount
   useEffect(() => {
     let active = true;
     Promise.all([getAllProfiles(), getAllApplications()]).then(([profilesData, appsData]) => {
@@ -34,11 +37,13 @@ export default function StaffPage() {
     return () => { active = false; };
   }, []);
 
+  // opens the shared confirm dialog with whatever action needs confirmation
   function openConfirm(title, message, label, onConfirm) {
     setConfirmConfig({ title, message, label, onConfirm });
     setConfirmOpen(true);
   }
 
+  // approves or rejects a staff application; promoting the user to staff on approval
   async function handleReviewApp(appId, status, targetUserId, username) {
     const action = status === "approved" ? "approve" : "reject";
     openConfirm(
@@ -60,6 +65,7 @@ export default function StaffPage() {
     );
   }
 
+  // toggles between active / suspended, or restores a banned account
   async function handleToggleStatus(userId, currentStatus) {
     let newStatus = currentStatus;
     if (currentStatus === "active") newStatus = "suspended";
@@ -87,6 +93,7 @@ export default function StaffPage() {
     }
   }
 
+  // permanently bans a user (requires confirm dialog)
   async function handleBan(userId) {
     openConfirm("Ban User", "Are you sure you want to ban this user? They will not be able to log in.", "Ban", async () => {
       const { success } = await updateProfileStatus(userId, "banned");
@@ -99,6 +106,7 @@ export default function StaffPage() {
     });
   }
 
+  // changes a user's role (customer → staff → manager or back)
   async function handleSetRole(userId, newRole) {
     openConfirm("Change Role", `Are you sure you want to change this user's role to ${newRole}?`, "Confirm", async () => {
       const { success } = await updateProfileRole(userId, newRole);
@@ -111,6 +119,7 @@ export default function StaffPage() {
     });
   }
 
+  // only show applications that haven't been reviewed yet
   const pendingApps = applications.filter(a => a.status === "pending");
 
   return (

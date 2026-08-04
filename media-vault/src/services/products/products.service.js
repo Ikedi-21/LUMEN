@@ -1,5 +1,7 @@
 import { supabase } from "@/services/supabase/client";
 
+// remaps snake_case DB columns to camelCase and tags everything with source:"admin"
+// so the media service can distinguish these from API-sourced items
 export async function getAdminProducts() {
   try {
     const { data, error } = await supabase.from("products").select("*");

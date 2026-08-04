@@ -9,6 +9,7 @@ import { formatCoinsAsCurrency } from "@/shared/lib/pricing";
 import "./Navbar.css";
 import "./NavbarDropdown.css";
 
+// top-level nav items — order matters for the desktop bar
 const NAV_LINKS = [
   { to: "/browse/movie", label: "Movies" },
   { to: "/browse/book", label: "Books" },
@@ -25,6 +26,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  // close user dropdown when clicking anywhere outside of it
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -35,15 +37,18 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // lock body scroll while the mobile drawer is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
+  // fall back through username → email → "?" for the avatar placeholder
   const displayInitials = profile?.username?.charAt(0).toUpperCase() ||
                           profile?.email?.charAt(0).toUpperCase() ||
                           "?";
 
+  // redirect guests to login before they can top up
   function handleTopUp() {
     if (!user) {
       navigate("/login");
