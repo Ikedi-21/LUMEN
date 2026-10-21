@@ -59,21 +59,35 @@
 ## 🗂️ Project Structure
 
 ```
-src/
-├── app/
-│   ├── layouts/          # StorefrontLayout, AdminLayout, MinimalLayout
-│   ├── routes.jsx        # Centralized route definitions
-│   └── providers.jsx     # Global context providers
-├── features/
-│   ├── storefront/       # Public-facing pages & components
-│   ├── auth/             # Login, Signup, Settings, Staff Application
-│   ├── admin/            # Dashboard, Products, Sales, Earnings
-│   ├── manager/          # Staff & Payout management
-│   └── staff/            # Staff-specific views
-├── hooks/                # Custom React hooks
-├── services/             # Supabase API service layer
-├── shared/               # Reusable UI components & utilities
-└── styles/               # Global stylesheets
+media-vault/
+├── api/
+│   └── verify-coin-purchase.js   # Vercel Serverless Function — Paystack verification
+├── supabase/
+│   └── migrations/               # PostgreSQL schema migrations
+├── public/                        # Static assets
+└── src/
+    ├── app/
+    │   ├── layouts/               # StorefrontLayout, AdminLayout, MinimalLayout
+    │   ├── routes.jsx             # Centralized route definitions
+    │   └── providers.jsx          # Global context providers (Auth, Storefront, Toast)
+    ├── features/
+    │   ├── storefront/            # Public-facing pages, components & context
+    │   ├── auth/                  # Login, Signup, Settings, Staff Application
+    │   ├── admin/                 # Dashboard, Products, Sales, Earnings
+    │   ├── manager/               # Staff & Payout management
+    │   └── staff/                 # Staff-specific views
+    ├── hooks/                     # Custom React hooks
+    ├── services/                  # Supabase service layer (products, cart, purchases…)
+    ├── shared/
+    │   ├── guards/                # Auth & role-based route guards
+    │   ├── hooks/                 # Shared utility hooks
+    │   ├── lib/                   # Helper utilities
+    │   └── ui/                    # Reusable UI components (Toast, etc.)
+    └── styles/
+        ├── tokens.css             # Design tokens (colors, spacing, typography)
+        ├── reset.css              # CSS reset
+        ├── buttons.css            # Button system
+        └── main.css               # Global styles
 ```
 
 ---
@@ -113,30 +127,72 @@ The app will be available at `http://localhost:5173`.
 Create a `.env.local` file in the root of the project with the following keys:
 
 ```env
-# Supabase
-VITE_SUPABASE_URL=your_supabase_project_url
+# ─── Supabase ───────────────────────────────────────────
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-# Paystack
-VITE_PAYSTACK_PUBLIC_KEY=your_paystack_public_key
+# ─── Supabase (Server-side only — Vercel Serverless) ────
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+
+# ─── Paystack ───────────────────────────────────────────
+VITE_PAYSTACK_PUBLIC_KEY=pk_live_or_test_xxxxxxxx     # Client-side (public)
+PAYSTACK_SECRET_KEY=sk_live_or_test_xxxxxxxx          # Server-side only
 ```
 
-> **Never** commit your `.env.local` file to version control.
+> [!CAUTION]
+> **Never** expose `SUPABASE_SERVICE_ROLE_KEY` or `PAYSTACK_SECRET_KEY` on the client.
+> These are server-side only and are used exclusively inside the `/api` Vercel Serverless Functions.
+> Prefix client-safe variables with `VITE_` so Vite includes them in the bundle.
 
 ---
 
 ## 🧰 Tech Stack
 
+### 🖥️ Frontend
+
+| Technology | Version | Purpose |
+|---|---|---|
+| [React](https://react.dev/) | 19 | Core UI library — with `useContext`, custom hooks & providers |
+| [Vite](https://vitejs.dev/) | 8 | Lightning-fast dev server & production bundler |
+| [React Router](https://reactrouter.com/) | 7 | Client-side routing with nested layouts & protected routes |
+| [Recharts](https://recharts.org/) | 3 | Sales analytics & earnings charts on the admin dashboard |
+| [Lucide React](https://lucide.dev/) | 1 | Consistent SVG icon system throughout the UI |
+
+### 🗄️ Backend & Database
+
 | Technology | Purpose |
 |---|---|
-| [React 19](https://react.dev/) | UI library |
-| [Vite 8](https://vitejs.dev/) | Build tool & dev server |
-| [React Router 7](https://reactrouter.com/) | Client-side routing |
-| [Supabase](https://supabase.com/) | Auth, database & storage backend |
-| [react-paystack](https://github.com/iamraphson/react-paystack) | Payment processing |
-| [Recharts](https://recharts.org/) | Analytics & charts |
-| [Lucide React](https://lucide.dev/) | Icon library |
-| [Google Fonts](https://fonts.google.com/) | Typography (Playfair Display + Inter) |
+| [Supabase](https://supabase.com/) | Hosted PostgreSQL database, row-level security (RLS), and storage |
+| [Supabase Auth](https://supabase.com/docs/guides/auth) | Email/password authentication with session management |
+| [Supabase Storage](https://supabase.com/docs/guides/storage) | Media file uploads (covers, video files) |
+| [PostgreSQL Migrations](./supabase/migrations/) | Version-controlled schema changes (story groups, staff applications) |
+
+### 💳 Payments
+
+| Technology | Purpose |
+|---|---|
+| [Paystack](https://paystack.com/) | Payment gateway for wallet top-ups (NGN) |
+| [react-paystack](https://github.com/iamraphson/react-paystack) | Paystack checkout integration on the client |
+| Vercel Serverless Function (`/api/verify-coin-purchase`) | Server-side Paystack transaction verification + coin crediting |
+
+### 🎨 UI & Design
+
+| Technology | Purpose |
+|---|---|
+| Vanilla CSS | All styling — no CSS framework |
+| CSS Custom Properties (Design Tokens) | Centralized color, spacing & typography tokens in `tokens.css` |
+| [Google Fonts](https://fonts.google.com/) | **Playfair Display** (display/headings) + **Inter** (body text) |
+| CSS Reset | Custom reset in `reset.css` for cross-browser consistency |
+| CSS Button System | Reusable button variants defined in `buttons.css` |
+
+### ⚙️ Tooling & Infrastructure
+
+| Technology | Purpose |
+|---|---|
+| [Vercel](https://vercel.com/) | Hosting, CI/CD & Serverless Functions runtime |
+| [ESLint 10](https://eslint.org/) | Code quality with `eslint-plugin-react-hooks` & `react-refresh` |
+| Path Aliases (`@/`) | `@/` maps to `src/` via Vite config for clean imports |
+| [Node.js](https://nodejs.org/) | Runtime for Vercel Serverless Functions |
 
 ---
 
